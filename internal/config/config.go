@@ -14,8 +14,8 @@ const (
 )
 
 var (
-	BaseW = ScreenWidth / 10
-	BaseH = ScreenHeight / 10
+	BaseW = float32(ScreenWidth / 10)
+	BaseH = float32(ScreenHeight / 10)
 
 	ColourTeal  = color.RGBA{R: 101, G: 247, B: 246, A: 255}
 	ColourPink  = color.RGBA{R: 255, G: 82, B: 242, A: 255}
@@ -30,7 +30,7 @@ var (
 	ParatrooperWalkSpeed = 0.5
 	ParatrooperWidth     = 6.0
 	ParatrooperHeight    = 10.0
-	ParaschuteRadius     = 20.0
+	ParachuteRadius      = 20.0
 
 	TurretRadius = 20.0
 	BulletSpeed  = 3.0
