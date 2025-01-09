@@ -49,7 +49,7 @@ func NewGame(hiScore int) *Game {
 	}
 	width := config.BaseW
 	game.barrelImage = ebiten.NewImage(int(width), int(width))
-	game.barrelImage.Fill(config.ColourBlack)
+	game.barrelImage.Fill(config.TransparentBlack)
 
 	xRect, yRect := width/2-width/12, width/12
 	wRect, hRect := width/6, width/3
@@ -112,24 +112,10 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		false,
 	)
 
-	/*op := &ebiten.DrawImageOptions{}
-	centerX := float64(config.ScreenWidth / 2)
-	centerY := float64(config.ScreenHeight)
-	centerY -= float64(config.BaseH)
-	centerY -= float64(config.BaseW) / 3
-	centerY -= float64(config.BaseW) / 24
-	barrelW := float64(g.barrelImage.Bounds().Dx())
-	barrelH := float64(g.barrelImage.Bounds().Dy())
-	op.GeoM.Translate(-float64(barrelW)/2, -float64(barrelH)/2)
-	op.GeoM.Rotate(g.barrelAngle * math.Pi / 180)
-	op.GeoM.Translate(centerX, centerY)
-	screen.DrawImage(g.barrelImage, op)*/
-
 	pinkBaseX := (float32(config.ScreenWidth) - float32(config.BaseW)/3) / 2
 	pinkBaseY := float32(config.ScreenHeight)
 	pinkBaseY -= float32(config.BaseH)
 	pinkBaseY -= float32(config.BaseW) / 3
-
 	pinkBaseW := float32(config.BaseW) / 3
 	pinkBaseH := float32(config.BaseW) / 3
 
@@ -142,6 +128,19 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		config.ColourPink,
 		false,
 	)
+
+	op := &ebiten.DrawImageOptions{}
+	centerX := float64(config.ScreenWidth / 2)
+	centerY := float64(config.ScreenHeight)
+	centerY -= float64(config.BaseH)
+	centerY -= float64(config.BaseW) / 3
+	centerY -= float64(config.BaseW) / 24
+	barrelW := float64(g.barrelImage.Bounds().Dx())
+	barrelH := float64(g.barrelImage.Bounds().Dy())
+	op.GeoM.Translate(-float64(barrelW)/2, -float64(barrelH)/2)
+	op.GeoM.Rotate(g.barrelAngle * math.Pi / 180)
+	op.GeoM.Translate(centerX, centerY)
+	screen.DrawImage(g.barrelImage, op)
 }
 
 func (g *Game) Update() error {

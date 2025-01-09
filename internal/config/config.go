@@ -17,10 +17,11 @@ var (
 	BaseW = float32(ScreenWidth / 10)
 	BaseH = float32(ScreenHeight / 10)
 
-	ColourTeal  = color.RGBA{R: 101, G: 247, B: 246, A: 255}
-	ColourPink  = color.RGBA{R: 255, G: 82, B: 242, A: 255}
-	ColourWhite = color.RGBA{R: 255, G: 255, B: 255, A: 255}
-	ColourBlack = color.RGBA{R: 0, G: 0, B: 0, A: 255}
+	ColourTeal       = color.RGBA{R: 101, G: 247, B: 246, A: 255}
+	ColourPink       = color.RGBA{R: 255, G: 82, B: 242, A: 255}
+	ColourWhite      = color.RGBA{R: 255, G: 255, B: 255, A: 255}
+	ColourBlack      = color.RGBA{R: 0, G: 0, B: 0, A: 255}
+	TransparentBlack = color.RGBA{R: 0, G: 0, B: 0, A: 0}
 
 	HelicopterSpawnChance = 0.01
 	HelicopterSpeed       = 1.5
