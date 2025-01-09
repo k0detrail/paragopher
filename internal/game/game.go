@@ -144,6 +144,17 @@ func (g *Game) Draw(screen *ebiten.Image) {
 }
 
 func (g *Game) Update() error {
+	if ebiten.IsKeyPressed(ebiten.KeyLeft) {
+		if g.barrelAngle > config.BarrelAngleMin {
+			g.barrelAngle--
+		}
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyRight) {
+		if g.barrelAngle < config.BarrelAngleMax {
+			g.barrelAngle++
+		}
+	}
+
 	return nil
 }
 
