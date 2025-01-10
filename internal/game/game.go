@@ -3,7 +3,7 @@ package game
 import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
-	"github.com/ystepanoff/paragophers/internal/config"
+	"github.com/ystepanoff/paragopher/internal/config"
 )
 
 type Game struct {

@@ -5,8 +5,8 @@ import (
 	"os"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/ystepanoff/paragophers/internal/config"
-	"github.com/ystepanoff/paragophers/internal/game"
+	"github.com/ystepanoff/paragopher/internal/config"
+	"github.com/ystepanoff/paragopher/internal/game"
 )
 
 func main() {

@@ -1,4 +1,4 @@
-module github.com/ystepanoff/paragophers
+module github.com/ystepanoff/paragopher
 
 go 1.23.3
 
