@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"image/color"
 	"time"
 )
@@ -38,4 +39,6 @@ var (
 	BulletRadius = 2.0
 
 	GroundY = 580
+
+	ErrEscPressed = errors.New("ESC pressed")
 )

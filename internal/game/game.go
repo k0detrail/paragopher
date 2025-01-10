@@ -51,14 +51,14 @@ func NewGame(hiScore int) *Game {
 	game.barrelImage = ebiten.NewImage(int(width), int(width))
 	game.barrelImage.Fill(config.TransparentBlack)
 
-	xRect, yRect := width/2-width/12, width/12
-	wRect, hRect := width/6, width/3
+	rectX, rectY := width/2-width/12, width/12
+	rectW, rectH := width/6, width/3
 	vector.DrawFilledRect(
 		game.barrelImage,
-		xRect,
-		yRect,
-		wRect,
-		hRect,
+		rectX,
+		rectY,
+		rectW,
+		rectH,
 		config.ColourTeal,
 		true,
 	)
@@ -144,6 +144,9 @@ func (g *Game) Draw(screen *ebiten.Image) {
 }
 
 func (g *Game) Update() error {
+	if ebiten.IsKeyPressed(ebiten.KeyEscape) {
+		return config.ErrEscPressed
+	}
 	if ebiten.IsKeyPressed(ebiten.KeyLeft) {
 		if g.barrelAngle > config.BarrelAngleMin {
 			g.barrelAngle--
