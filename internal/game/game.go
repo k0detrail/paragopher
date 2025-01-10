@@ -1,8 +1,6 @@
 package game
 
 import (
-	"time"
-
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
 	"github.com/ystepanoff/paragophers/internal/config"
@@ -17,22 +15,6 @@ type Game struct {
 	score    int
 	hiScore  int
 	gameOver bool
-}
-
-type Helicopter struct {
-	x, y     float32
-	vx       float32
-	lastDrop time.Time
-}
-
-type Paratrooper struct {
-	x, y      float32
-	vy        float32
-	parachute bool
-	landed    bool
-	onBase    bool
-	climbing  bool
-	onTopOf   *Paratrooper
 }
 
 func NewGame(hiScore int) *Game {
