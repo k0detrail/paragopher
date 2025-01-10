@@ -36,6 +36,7 @@ var (
 
 	BulletSpeed  float64 = 3.0
 	BulletRadius float32 = 2.0
+	ShotCooldown int64   = 500
 
 	GroundY = 580
 

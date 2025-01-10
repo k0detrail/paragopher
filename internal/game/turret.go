@@ -2,6 +2,7 @@ package game
 
 import (
 	"math"
+	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
@@ -97,6 +98,7 @@ func (g *Game) shoot() {
 		vx: vx,
 		vy: vy,
 	})
+	g.lastShot = time.Now()
 }
 
 func (g *Game) updateBullets() {

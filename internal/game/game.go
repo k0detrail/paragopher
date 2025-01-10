@@ -1,6 +1,8 @@
 package game
 
 import (
+	"time"
+
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
 	"github.com/ystepanoff/paragopher/internal/config"
@@ -10,7 +12,8 @@ type Game struct {
 	barrelAngle float64
 	barrelImage *ebiten.Image
 
-	bullets []*Bullet
+	bullets  []*Bullet
+	lastShot time.Time
 
 	score    int
 	hiScore  int
@@ -19,8 +22,9 @@ type Game struct {
 
 func NewGame(hiScore int) *Game {
 	game := &Game{
-		bullets: make([]*Bullet, 0),
-		hiScore: hiScore,
+		bullets:  make([]*Bullet, 0),
+		lastShot: time.Now(),
+		hiScore:  hiScore,
 	}
 	width := config.BaseW
 	game.barrelImage = ebiten.NewImage(int(width), int(width))
@@ -96,7 +100,9 @@ func (g *Game) Update() error {
 		}
 	}
 	if ebiten.IsKeyPressed(ebiten.KeySpace) {
-		g.shoot()
+		if time.Since(g.lastShot).Milliseconds() > config.ShotCooldown {
+			g.shoot()
+		}
 	}
 
 	g.updateBullets()
