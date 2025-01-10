@@ -18,7 +18,7 @@ const (
 	HelicopterBodyW       = 30.0
 	HelicopterBodyH       = 10.0
 	HelicopterTailW       = 16.0
-	HelicopterTailH       = 30.0
+	HelicopterTailH       = 3.0
 	HelicopterRotorLen    = 20.0
 
 	ParatrooperFallSpeed = 1.2
