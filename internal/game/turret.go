@@ -102,7 +102,7 @@ func (g *Game) shoot() {
 }
 
 func (g *Game) updateBullets() {
-	active := make([]*Bullet, 0)
+	active := make([]*Bullet, 0, len(g.bullets))
 	for _, b := range g.bullets {
 		b.x += b.vx
 		b.y += b.vy

@@ -15,6 +15,9 @@ type Game struct {
 	bullets  []*Bullet
 	lastShot time.Time
 
+	helicopters  []*Helicopter
+	paratroopers []*Paratrooper
+
 	score    int
 	hiScore  int
 	gameOver bool
@@ -83,6 +86,7 @@ func NewGame(hiScore int) *Game {
 func (g *Game) Draw(screen *ebiten.Image) {
 	g.drawTurret(screen)
 	g.drawBullets(screen)
+	g.drawHelicopters(screen)
 }
 
 func (g *Game) Update() error {
@@ -106,6 +110,8 @@ func (g *Game) Update() error {
 	}
 
 	g.updateBullets()
+	g.spawnHelicopters()
+	g.updateHelicopters()
 
 	return nil
 }
