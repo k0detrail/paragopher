@@ -12,6 +12,11 @@ import (
 )
 
 type Game struct {
+	Score          int
+	hiScore        int
+	gameOver       bool
+	showExitDialog bool
+
 	barrelAngle float64
 	barrelImage *ebiten.Image
 
@@ -20,11 +25,6 @@ type Game struct {
 
 	helicopters  []*Helicopter
 	paratroopers []*Paratrooper
-
-	score          int
-	hiScore        int
-	gameOver       bool
-	showExitDialog bool
 }
 
 func NewGame(hiScore int) *Game {
@@ -95,7 +95,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	// Display Score
 	ebitenutil.DebugPrint(
 		screen,
-		fmt.Sprintf("SCORE: %d    HI-SCORE: %d", g.score, g.hiScore),
+		fmt.Sprintf("SCORE: %d    HI-SCORE: %d", g.Score, g.hiScore),
 	)
 
 	if g.showExitDialog {

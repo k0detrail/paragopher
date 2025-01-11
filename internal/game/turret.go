@@ -99,7 +99,7 @@ func (g *Game) shoot() {
 		vx: vx,
 		vy: vy,
 	})
-	g.score = max(g.score-1, 0)
+	g.Score = max(g.Score-1, 0)
 	g.lastShot = time.Now()
 }
 
@@ -134,7 +134,7 @@ bulletLoop:
 				config.HelicopterBodyH,
 			) {
 				g.helicopters = append(g.helicopters[:i], g.helicopters[i+1:]...)
-				g.score += 10
+				g.Score += 10
 				continue bulletLoop
 			}
 		}
