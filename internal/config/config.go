@@ -12,7 +12,7 @@ const (
 	BarrelAngleMin = -90.0
 	BarrelAngleMax = 90.0
 
-	HelicopterSpawnChance = 0.009
+	HelicopterSpawnChance = 0.008
 	HelicopterSpeed       = 1.5
 	HelicopterDropRate    = 2
 	HelicopterBodyW       = 30.0
@@ -27,7 +27,7 @@ const (
 	ParatrooperHeight    = 10.0
 	ParachuteRadius      = 20.0
 
-	BulletSpeed  = 3.0
+	BulletSpeed  = 5.0
 	BulletRadius = 2.0
 	ShotCooldown = 200
 
