@@ -112,6 +112,7 @@ func (g *Game) Update() error {
 	g.updateBullets()
 	g.spawnHelicopters()
 	g.updateHelicopters()
+	g.checkHits()
 
 	return nil
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
 	"github.com/ystepanoff/paragopher/internal/config"
+	"github.com/ystepanoff/paragopher/internal/utils"
 )
 
 type Bullet struct {
@@ -113,4 +114,30 @@ func (g *Game) updateBullets() {
 		active = append(active, b)
 	}
 	g.bullets = active
+}
+
+func (g *Game) checkHits() {
+	activeBullets := make([]*Bullet, 0, len(g.bullets))
+
+bulletLoop:
+	for _, b := range g.bullets {
+		for i, h := range g.helicopters {
+			if utils.BoundingBoxOverlap(
+				b.x-1,
+				b.y-1,
+				2.0,
+				2.0,
+				h.x-config.HelicopterBodyW/2.0,
+				h.y-config.HelicopterBodyH/2.0,
+				config.HelicopterBodyW,
+				config.HelicopterBodyH,
+			) {
+				g.helicopters = append(g.helicopters[:i], g.helicopters[i+1:]...)
+				g.score += 10
+				continue bulletLoop
+			}
+		}
+		activeBullets = append(activeBullets, b)
+	}
+	g.bullets = activeBullets
 }

@@ -29,7 +29,7 @@ const (
 
 	BulletSpeed  = 3.0
 	BulletRadius = 2.0
-	ShotCooldown = 500
+	ShotCooldown = 250
 
 	GroundY = 580
 )
