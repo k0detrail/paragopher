@@ -1,9 +1,11 @@
 package game
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2/vector"
 	"github.com/ystepanoff/paragopher/internal/config"
 )
@@ -87,6 +89,12 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	g.drawTurret(screen)
 	g.drawBullets(screen)
 	g.drawHelicopters(screen)
+
+	// Display Score
+	ebitenutil.DebugPrint(
+		screen,
+		fmt.Sprintf("SCORE: %d    HI-SCORE: %d", g.score, g.hiScore),
+	)
 }
 
 func (g *Game) Update() error {

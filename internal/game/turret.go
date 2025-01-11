@@ -99,6 +99,7 @@ func (g *Game) shoot() {
 		vx: vx,
 		vy: vy,
 	})
+	g.score = max(g.score-1, 0)
 	g.lastShot = time.Now()
 }
 
