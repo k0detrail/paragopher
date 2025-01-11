@@ -23,9 +23,9 @@ const (
 
 	ParatrooperFallSpeed = 1.2
 	ParatrooperWalkSpeed = 0.5
-	ParatrooperWidth     = 6.0
-	ParatrooperHeight    = 10.0
-	ParachuteRadius      = 20.0
+	ParatrooperWidth     = 4.0
+	ParatrooperHeight    = 6.0
+	ParachuteRadius      = 6.0
 
 	BulletSpeed  = 10.0
 	BulletRadius = 2.0
