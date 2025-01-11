@@ -6,6 +6,7 @@ import (
 	"github.com/ystepanoff/paragopher/internal/config"
 )
 
+// Paratroopers
 type Paratrooper struct {
 	x, y      float32
 	vy        float32
@@ -14,16 +15,6 @@ type Paratrooper struct {
 	onBase    bool
 	climbing  bool
 	onTopOf   *Paratrooper
-}
-
-func (g *Game) spawnParatrooper(x, y float32) {
-	g.paratroopers = append(g.paratroopers, &Paratrooper{
-		x:         x,
-		y:         y,
-		vy:        config.ParatrooperFallSpeed,
-		parachute: true,
-		landed:    false,
-	})
 }
 
 func (g *Game) drawParatrooper(screen *ebiten.Image, p *Paratrooper) {
@@ -85,4 +76,20 @@ func (g *Game) drawParatrooper(screen *ebiten.Image, p *Paratrooper) {
 			false,
 		)
 	}
+}
+
+func (g *Game) drawParatroopers(screen *ebiten.Image) {
+	for _, p := range g.paratroopers {
+		g.drawParatrooper(screen, p)
+	}
+}
+
+func (g *Game) spawnParatrooper(x, y float32) {
+	g.paratroopers = append(g.paratroopers, &Paratrooper{
+		x:         x,
+		y:         y,
+		vy:        config.ParatrooperFallSpeed,
+		parachute: true,
+		landed:    false,
+	})
 }

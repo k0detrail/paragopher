@@ -16,28 +16,24 @@ type Helicopter struct {
 	lastDrop time.Time
 }
 
-func (g *Game) drawHelicopter(
-	screen *ebiten.Image,
-	x, y float32,
-	reverse bool,
-) {
+func (g *Game) drawHelicopter(screen *ebiten.Image, h *Helicopter) {
 	vector.DrawFilledRect(
 		screen,
-		x-config.HelicopterBodyW/2.0,
-		y-config.HelicopterBodyH/2.0,
+		h.x-config.HelicopterBodyW/2.0,
+		h.y-config.HelicopterBodyH/2.0,
 		config.HelicopterBodyW,
 		config.HelicopterBodyH,
 		config.ColourTeal,
 		false,
 	)
-	tailX := x - config.HelicopterBodyW
-	if reverse {
-		tailX = x + config.HelicopterBodyW/2.0
+	tailX := h.x - config.HelicopterBodyW
+	if h.vx < 0 {
+		tailX = h.x + config.HelicopterBodyW/2.0
 	}
 	vector.DrawFilledRect(
 		screen,
 		tailX,
-		y-config.HelicopterTailH/2.0,
+		h.y-config.HelicopterTailH/2.0,
 		config.HelicopterTailW,
 		config.HelicopterTailH,
 		config.ColourTeal,
@@ -45,10 +41,10 @@ func (g *Game) drawHelicopter(
 	)
 	vector.StrokeLine(
 		screen,
-		x-config.HelicopterRotorLen/2.0,
-		y-config.HelicopterBodyH/2.0-2,
-		x+config.HelicopterRotorLen/2.0,
-		y-config.HelicopterBodyH/2.0-2,
+		h.x-config.HelicopterRotorLen/2.0,
+		h.y-config.HelicopterBodyH/2.0-2,
+		h.x+config.HelicopterRotorLen/2.0,
+		h.y-config.HelicopterBodyH/2.0-2,
 		1.0,
 		config.ColourMagenta,
 		false,
@@ -57,11 +53,11 @@ func (g *Game) drawHelicopter(
 
 func (g *Game) drawHelicopters(screen *ebiten.Image) {
 	for _, h := range g.helicopters {
-		g.drawHelicopter(screen, h.x, h.y, h.vx < 0)
+		g.drawHelicopter(screen, h)
 	}
 }
 
-func (g *Game) spawnHelicopters() {
+func (g *Game) spawnHelicopter() {
 	if rand.Float32() < config.HelicopterSpawnChance {
 		startX := -float32(config.HelicopterBodyW + config.HelicopterTailW)
 		startY := float32(50 + rand.Intn(50))

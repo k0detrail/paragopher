@@ -184,7 +184,7 @@ func (g *Game) Update() error {
 		}
 
 		g.updateBullets()
-		g.spawnHelicopters()
+		g.spawnHelicopter()
 		g.updateHelicopters()
 		g.checkHits()
 	} else {
