@@ -2,6 +2,7 @@ package game
 
 import (
 	"fmt"
+	"image/color"
 	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -20,9 +21,10 @@ type Game struct {
 	helicopters  []*Helicopter
 	paratroopers []*Paratrooper
 
-	score    int
-	hiScore  int
-	gameOver bool
+	score          int
+	hiScore        int
+	gameOver       bool
+	showExitDialog bool
 }
 
 func NewGame(hiScore int) *Game {
@@ -95,33 +97,104 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		screen,
 		fmt.Sprintf("SCORE: %d    HI-SCORE: %d", g.score, g.hiScore),
 	)
+
+	if g.showExitDialog {
+		overlay := ebiten.NewImage(screen.Bounds().Dx(), screen.Bounds().Dy())
+		overlay.Fill(color.RGBA{0, 0, 0, 225})
+		screen.DrawImage(overlay, nil)
+
+		dialogWidth, dialogHeight := 300, 150
+		dialogX := (screen.Bounds().Dx() - dialogWidth) / 2
+		dialogY := (screen.Bounds().Dy() - dialogHeight) / 2
+		dialog := ebiten.NewImage(dialogWidth, dialogHeight)
+		dialog.Fill(color.RGBA{25, 25, 25, 255})
+
+		borderColor := color.RGBA{0, 0, 0, 255}
+		vector.DrawFilledRect(
+			dialog,
+			0,
+			0,
+			float32(dialogWidth),
+			5,
+			borderColor,
+			false,
+		)
+		vector.DrawFilledRect(
+			dialog,
+			0,
+			float32(dialogHeight-5),
+			float32(dialogWidth),
+			5,
+			borderColor,
+			false,
+		)
+		vector.DrawFilledRect(
+			dialog,
+			0,
+			0,
+			5,
+			float32(dialogHeight),
+			borderColor,
+			false,
+		)
+		vector.DrawFilledRect(
+			dialog,
+			float32(dialogWidth-5),
+			0,
+			5,
+			float32(dialogHeight),
+			borderColor,
+			false,
+		)
+		op := &ebiten.DrawImageOptions{}
+		op.GeoM.Translate(float64(dialogX), float64(dialogY))
+		screen.DrawImage(dialog, op)
+
+		msg := "Do you want to exit the game?"
+		textX := dialogX + 50
+		textY := dialogY + 40
+		ebitenutil.DebugPrintAt(screen, msg, textX, textY)
+
+		yesText := "Y: Yes"
+		noText := "N: No"
+		ebitenutil.DebugPrintAt(screen, yesText, dialogX+50, dialogY+90)
+		ebitenutil.DebugPrintAt(screen, noText, dialogX+200, dialogY+90)
+	}
 }
 
 func (g *Game) Update() error {
-	if ebiten.IsKeyPressed(ebiten.KeyEscape) {
-		return config.ErrEscPressed
-	}
-	if ebiten.IsKeyPressed(ebiten.KeyLeft) {
-		if g.barrelAngle > config.BarrelAngleMin {
-			g.barrelAngle--
+	if !g.showExitDialog {
+		if ebiten.IsKeyPressed(ebiten.KeyEscape) {
+			g.showExitDialog = true
 		}
-	}
-	if ebiten.IsKeyPressed(ebiten.KeyRight) {
-		if g.barrelAngle < config.BarrelAngleMax {
-			g.barrelAngle++
+		if ebiten.IsKeyPressed(ebiten.KeyLeft) {
+			if g.barrelAngle > config.BarrelAngleMin {
+				g.barrelAngle--
+			}
 		}
-	}
-	if ebiten.IsKeyPressed(ebiten.KeySpace) {
-		if time.Since(g.lastShot).Milliseconds() > config.ShotCooldown {
-			g.shoot()
+		if ebiten.IsKeyPressed(ebiten.KeyRight) {
+			if g.barrelAngle < config.BarrelAngleMax {
+				g.barrelAngle++
+			}
 		}
-	}
+		if ebiten.IsKeyPressed(ebiten.KeySpace) {
+			if time.Since(g.lastShot).Milliseconds() > config.ShotCooldown {
+				g.shoot()
+			}
+		}
 
-	g.updateBullets()
-	g.spawnHelicopters()
-	g.updateHelicopters()
-	g.checkHits()
-
+		g.updateBullets()
+		g.spawnHelicopters()
+		g.updateHelicopters()
+		g.checkHits()
+	} else {
+		if ebiten.IsKeyPressed(ebiten.KeyY) {
+			return config.ErrQuit
+		}
+		if ebiten.IsKeyPressed(ebiten.KeyN) {
+			g.showExitDialog = false
+		}
+	}
 	return nil
 }
 

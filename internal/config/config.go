@@ -45,5 +45,5 @@ var (
 	ColourBlack      = color.RGBA{R: 0, G: 0, B: 0, A: 255}
 	TransparentBlack = color.RGBA{R: 0, G: 0, B: 0, A: 0}
 
-	ErrEscPressed = errors.New("ESC pressed")
+	ErrQuit = errors.New("user quit the game")
 )

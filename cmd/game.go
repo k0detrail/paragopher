@@ -24,7 +24,7 @@ func main() {
 	g := game.NewGame(gameData.HiScore)
 
 	if err := ebiten.RunGame(g); err != nil {
-		if err == config.ErrEscPressed {
+		if err == config.ErrQuit {
 			os.Exit(0)
 		}
 		log.Fatal(err)
