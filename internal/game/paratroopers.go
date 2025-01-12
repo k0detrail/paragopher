@@ -14,9 +14,6 @@ type Paratrooper struct {
 	x, y      float32
 	parachute bool
 	landed    bool
-	onBase    bool
-	climbing  bool
-	onTopOf   *Paratrooper
 }
 
 // An ugly hack until vector.DrawFilledPath is available in Ebitengine
@@ -187,6 +184,19 @@ func (g *Game) walk(p *Paratrooper) {
 		config.BaseWidth,
 	) {
 		return
+	}
+	for _, q := range g.paratroopers {
+		if math.Abs(float64(q.x-p.x)) < 1e-6 || !q.landed {
+			continue
+		}
+		if utils.Overlap1D(
+			newX-config.ParatrooperWidth/2.0,
+			config.ParatrooperWidth,
+			q.x-config.ParatrooperWidth/2.0,
+			config.ParatrooperWidth,
+		) {
+			return
+		}
 	}
 	p.x = newX
 }
