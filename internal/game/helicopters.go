@@ -81,7 +81,8 @@ func (g *Game) updateHelicopters() {
 		h.x += h.vx
 		timePassed := time.Since(h.lastDrop)
 		if timePassed > config.HelicopterDropRate*time.Second {
-			// Time to drop a paratrooper!
+			g.spawnParatrooper(h.x, h.y)
+			h.lastDrop = time.Now()
 		}
 		if h.x > -100 && h.x < config.ScreenWidth+100 {
 			active = append(active, h)

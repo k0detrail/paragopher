@@ -91,6 +91,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	g.drawTurret(screen)
 	g.drawBullets(screen)
 	g.drawHelicopters(screen)
+	g.drawParatroopers(screen)
 
 	// Display Score
 	ebitenutil.DebugPrint(
@@ -186,6 +187,7 @@ func (g *Game) Update() error {
 		g.updateBullets()
 		g.spawnHelicopter()
 		g.updateHelicopters()
+		g.updateParatroopers()
 		g.checkHits()
 	} else {
 		if ebiten.IsKeyPressed(ebiten.KeyY) {

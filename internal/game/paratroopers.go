@@ -41,7 +41,7 @@ func (g *Game) drawParatrooper(screen *ebiten.Image, p *Paratrooper) {
 			p.x-config.ParachuteRadius,
 			p.y,
 			p.x-config.ParachuteRadius/2.0,
-			config.ParachuteRadius,
+			p.y,
 			1,
 			config.ColourTeal,
 			false,
@@ -51,7 +51,7 @@ func (g *Game) drawParatrooper(screen *ebiten.Image, p *Paratrooper) {
 			p.x+config.ParachuteRadius,
 			p.y,
 			p.x-config.ParachuteRadius/2.0,
-			config.ParachuteRadius,
+			p.y,
 			1,
 			config.ColourTeal,
 			false,
@@ -92,4 +92,22 @@ func (g *Game) spawnParatrooper(x, y float32) {
 		parachute: true,
 		landed:    false,
 	})
+}
+
+func (g *Game) updateParatroopers() {
+	updated := make([]*Paratrooper, 0, len(g.paratroopers))
+	for _, p := range g.paratroopers {
+		if !p.landed {
+			p.y += p.vy
+			if p.y >= config.GroundY-config.ParatrooperHeight {
+				p.y = config.GroundY - config.ParatrooperHeight
+				p.landed = true
+				p.parachute = false
+			}
+		} else {
+			// For now, just stay on the ground
+		}
+		updated = append(updated, p)
+	}
+	g.paratroopers = updated
 }
