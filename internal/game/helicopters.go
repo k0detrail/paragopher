@@ -7,6 +7,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
 	"github.com/ystepanoff/paragopher/internal/config"
+	"github.com/ystepanoff/paragopher/internal/utils"
 )
 
 // Helicopters
@@ -80,7 +81,8 @@ func (g *Game) updateHelicopters() {
 	for _, h := range g.helicopters {
 		h.x += h.vx
 		timePassed := time.Since(h.lastDrop)
-		if timePassed > (time.Duration(config.HelicopterDropRate+rand.Float32()*100))*time.Second {
+		if timePassed > config.HelicopterDropRate*time.Second &&
+			g.canDrop(h.x) {
 			g.spawnParatrooper(h.x, h.y)
 			h.lastDrop = time.Now()
 		}
@@ -89,4 +91,23 @@ func (g *Game) updateHelicopters() {
 		}
 	}
 	g.helicopters = active
+}
+
+func (g *Game) canDrop(x float32) bool {
+	baseX := (config.ScreenWidth - config.BaseWidth) / 2.0
+	pX := x - config.ParatrooperWidth/2.0
+	if utils.Overlap1D(pX, config.ParatrooperWidth, baseX, config.BaseWidth) {
+		return false
+	}
+	for _, p := range g.paratroopers {
+		if utils.Overlap1D(
+			pX-1.0,
+			config.ParatrooperWidth+2.0,
+			p.x-config.ParatrooperWidth/2.0-1.0,
+			config.ParatrooperWidth+2.0,
+		) {
+			return false
+		}
+	}
+	return true
 }

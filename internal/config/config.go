@@ -14,7 +14,7 @@ const (
 
 	HelicopterSpawnChance = 0.008
 	HelicopterSpeed       = 1.5
-	HelicopterDropRate    = 2
+	HelicopterDropRate    = 5
 	HelicopterBodyW       = 30.0
 	HelicopterBodyH       = 10.0
 	HelicopterTailW       = 16.0
@@ -32,11 +32,11 @@ const (
 )
 
 var (
-	BaseW = float32(ScreenWidth) / 10.0
-	BaseH = float32(ScreenHeight) / 10.0
+	BaseWidth  = float32(ScreenWidth) / 10.0
+	BaseHeight = float32(ScreenHeight) / 10.0
 
 	ParatrooperWidth  = float32(10.0)
-	ParatrooperHeight = BaseH / 3.0
+	ParatrooperHeight = BaseHeight / 3.0
 	ParachuteRadius   = float32(10.0)
 
 	ColourTeal           = color.RGBA{R: 101, G: 247, B: 246, A: 255}

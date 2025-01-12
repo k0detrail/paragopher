@@ -17,24 +17,24 @@ type Bullet struct {
 
 func (g *Game) drawTurret(screen *ebiten.Image) {
 	screen.Fill(config.ColourBlack)
-	baseX := (config.ScreenWidth - config.BaseW) / 2
-	baseY := config.ScreenHeight - config.BaseH
+	baseX := (config.ScreenWidth - config.BaseWidth) / 2
+	baseY := config.ScreenHeight - config.BaseHeight
 	vector.DrawFilledRect(
 		screen,
 		baseX,
 		baseY,
-		config.BaseW,
-		config.BaseH,
+		config.BaseWidth,
+		config.BaseHeight,
 		config.ColourWhite,
 		false,
 	)
 
-	pinkBaseX := (float32(config.ScreenWidth) - config.BaseW/3.0) / 2.0
+	pinkBaseX := (float32(config.ScreenWidth) - config.BaseWidth/3.0) / 2.0
 	pinkBaseY := float32(config.ScreenHeight)
-	pinkBaseY -= config.BaseH
-	pinkBaseY -= config.BaseW / 3
-	pinkBaseW := config.BaseW / 3
-	pinkBaseH := config.BaseW / 3
+	pinkBaseY -= config.BaseHeight
+	pinkBaseY -= config.BaseWidth / 3
+	pinkBaseW := config.BaseWidth / 3
+	pinkBaseH := config.BaseWidth / 3
 
 	vector.DrawFilledRect(
 		screen,
@@ -49,9 +49,9 @@ func (g *Game) drawTurret(screen *ebiten.Image) {
 	op := &ebiten.DrawImageOptions{}
 	centerX := float64(config.ScreenWidth) / 2.0
 	centerY := float64(config.ScreenHeight)
-	centerY -= float64(config.BaseH)
-	centerY -= float64(config.BaseW) / 3.0
-	centerY -= float64(config.BaseW) / 24.0
+	centerY -= float64(config.BaseHeight)
+	centerY -= float64(config.BaseWidth) / 3.0
+	centerY -= float64(config.BaseWidth) / 24.0
 	barrelW := float64(g.barrelImage.Bounds().Dx())
 	barrelH := float64(g.barrelImage.Bounds().Dy())
 	op.GeoM.Translate(-barrelW/2.0, -barrelH/2.0)
@@ -76,11 +76,11 @@ func (g *Game) drawBullets(screen *ebiten.Image) {
 func (g *Game) shoot() {
 	barrelCircleX := float32(config.ScreenWidth) / 2.0
 	barrelCircleY := float32(config.ScreenHeight)
-	barrelCircleY -= config.BaseH
-	barrelCircleY -= config.BaseW / 3.0
-	barrelCircleY -= config.BaseW / 24.0
+	barrelCircleY -= config.BaseHeight
+	barrelCircleY -= config.BaseWidth / 3.0
+	barrelCircleY -= config.BaseWidth / 24.0
 
-	width := config.BaseW
+	width := config.BaseWidth
 	localTipX := width / 2
 	localTipY := width / 12
 	angleRadians := float64(g.barrelAngle * math.Pi / 180.0)
@@ -123,7 +123,7 @@ func (g *Game) checkHits() {
 bulletLoop:
 	for _, b := range g.bullets {
 		for i, h := range g.helicopters {
-			if utils.BoundingBoxOverlap(
+			if utils.Overlap2D(
 				b.x-config.BulletRadius/2.0,
 				b.y-config.BulletRadius/2.0,
 				config.BulletRadius,
@@ -139,7 +139,7 @@ bulletLoop:
 			}
 		}
 		for i, p := range g.paratroopers {
-			if utils.BoundingBoxOverlap(
+			if utils.Overlap2D(
 				b.x-config.BulletRadius/2.0,
 				b.y-config.BulletRadius/2.0,
 				config.BulletRadius,
@@ -148,7 +148,7 @@ bulletLoop:
 				p.y,
 				config.ParatrooperWidth,
 				config.ParatrooperHeight,
-			) || utils.BoundingBoxOverlap(
+			) || utils.Overlap2D(
 				b.x-config.BulletRadius/2.0,
 				b.y-config.BulletRadius/2.0,
 				config.BulletRadius,

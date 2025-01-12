@@ -32,7 +32,7 @@ func NewGame(hiScore int) *Game {
 		lastShot: time.Now(),
 		hiScore:  hiScore,
 	}
-	width := config.BaseW
+	width := config.BaseWidth
 	game.barrelImage = ebiten.NewImage(int(width), int(width))
 	game.barrelImage.Fill(config.TransparentBlack)
 
