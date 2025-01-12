@@ -9,8 +9,8 @@ const (
 	ScreenWidth  = 800
 	ScreenHeight = 600
 
-	BarrelAngleMin = -90.0
-	BarrelAngleMax = 90.0
+	BarrelAngleMin = -70.0
+	BarrelAngleMax = 70.0
 
 	HelicopterSpawnChance = 0.008
 	HelicopterSpeed       = 1.5
