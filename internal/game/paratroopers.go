@@ -7,6 +7,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
 	"github.com/ystepanoff/paragopher/internal/config"
+	"github.com/ystepanoff/paragopher/internal/utils"
 )
 
 type Paratrooper struct {
@@ -162,9 +163,30 @@ func (g *Game) updateParatroopers() {
 				p.parachute = false
 			}
 		} else {
-			// For now, just stay on the ground
+			g.walk(p)
 		}
 		updated = append(updated, p)
 	}
 	g.paratroopers = updated
+}
+
+func (g *Game) walk(p *Paratrooper) {
+	vx := float32(config.ParatrooperWalkSpeed)
+	baseX := (config.ScreenWidth - config.BaseWidth) / 2
+	// baseY := config.ScreenHeight - config.BaseHeight
+	if p.x > float32(config.ScreenWidth)/2.0 {
+		vx = -vx
+		// baseX += config.BaseWidth
+		// baseY += config.BaseHeight
+	}
+	newX := p.x + vx
+	if utils.Overlap1D(
+		newX-config.ParatrooperWidth/2.0,
+		config.ParatrooperWidth,
+		baseX,
+		config.BaseWidth,
+	) {
+		return
+	}
+	p.x = newX
 }

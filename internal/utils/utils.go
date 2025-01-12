@@ -1,7 +1,7 @@
 package utils
 
 func Overlap1D(x1, w1, x2, w2 float32) bool {
-	if x1+w1 < x2 || x2+w2 < x1 {
+	if x1+w1 <= x2 || x2+w2 <= x1 {
 		return false
 	}
 	return true
