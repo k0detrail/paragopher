@@ -166,4 +166,7 @@ bulletLoop:
 		activeBullets = append(activeBullets, b)
 	}
 	g.bullets = activeBullets
+	if g.Score > g.gameData.HiScore {
+		g.gameData.HiScore = g.Score
+	}
 }

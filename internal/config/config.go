@@ -49,6 +49,5 @@ var (
 	TransparentBlack     = color.RGBA{R: 0, G: 0, B: 0, A: 0}
 	SemiTransparentBlack = color.RGBA{R: 0, G: 0, B: 0, A: 225}
 
-	ErrQuit     = errors.New("user quit the game")
-	ErrGameOver = errors.New("game over")
+	ErrQuit = errors.New("user quit the game")
 )

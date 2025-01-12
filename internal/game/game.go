@@ -8,29 +8,35 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2/vector"
 	"github.com/ystepanoff/paragopher/internal/config"
+	"github.com/ystepanoff/paragopher/internal/utils"
 )
 
 type Game struct {
-	Score              int
-	hiScore            int
+	Score    int
+	gameData *utils.GameData
+
 	showExitDialog     bool
 	showGameOverDialog bool
 
 	barrelAngle float64
 	barrelImage *ebiten.Image
 
-	bullets  []*Bullet
-	lastShot time.Time
-
+	bullets      []*Bullet
+	lastShot     time.Time
 	helicopters  []*Helicopter
 	paratroopers []*Paratrooper
 }
 
-func NewGame(hiScore int) *Game {
+func NewGame() *Game {
+	gameData, err := utils.LoadData()
+	if err != nil {
+		fmt.Println("Error loading game data!")
+		gameData = &utils.GameData{}
+	}
 	game := &Game{
 		bullets:  make([]*Bullet, 0),
 		lastShot: time.Now(),
-		hiScore:  hiScore,
+		gameData: gameData,
 	}
 	width := config.BaseWidth
 	game.barrelImage = ebiten.NewImage(int(width), int(width))
@@ -95,7 +101,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	// Display Score
 	ebitenutil.DebugPrint(
 		screen,
-		fmt.Sprintf("SCORE: %d    HI-SCORE: %d", g.Score, g.hiScore),
+		fmt.Sprintf("SCORE: %d    HI-SCORE: %d", g.Score, g.gameData.HiScore),
 	)
 
 	if g.showExitDialog {
@@ -110,6 +116,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 func (g *Game) Update() error {
 	if g.showExitDialog {
 		if ebiten.IsKeyPressed(ebiten.KeyY) {
+			utils.SaveData(g.gameData)
 			return config.ErrQuit
 		}
 		if ebiten.IsKeyPressed(ebiten.KeyN) {
@@ -118,6 +125,7 @@ func (g *Game) Update() error {
 		return nil
 	}
 	if g.showGameOverDialog {
+		utils.SaveData(g.gameData)
 		if ebiten.IsKeyPressed(ebiten.KeyY) {
 			g.Reset()
 		}
