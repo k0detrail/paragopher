@@ -124,8 +124,8 @@ bulletLoop:
 	for _, b := range g.bullets {
 		for i, h := range g.helicopters {
 			if utils.BoundingBoxOverlap(
-				b.x-1,
-				b.y-1,
+				b.x-1.0,
+				b.y-1.0,
 				2.0,
 				2.0,
 				h.x-config.HelicopterBodyW/2.0,
@@ -135,6 +135,22 @@ bulletLoop:
 			) {
 				g.helicopters = append(g.helicopters[:i], g.helicopters[i+1:]...)
 				g.Score += 10
+				continue bulletLoop
+			}
+		}
+		for i, p := range g.paratroopers {
+			if utils.BoundingBoxOverlap(
+				b.x-1.0,
+				b.y-1.0,
+				2.0,
+				2.0,
+				p.x-config.ParatrooperWidth/2.0,
+				p.y,
+				config.ParatrooperWidth,
+				config.ParatrooperHeight,
+			) {
+				g.paratroopers = append(g.paratroopers[:i], g.paratroopers[i+1:]...)
+				g.Score += 5
 				continue bulletLoop
 			}
 		}
