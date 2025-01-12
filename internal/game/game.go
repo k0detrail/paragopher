@@ -2,7 +2,6 @@ package game
 
 import (
 	"fmt"
-	"image/color"
 	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -101,23 +100,22 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	if g.showExitDialog {
 		overlay := ebiten.NewImage(screen.Bounds().Dx(), screen.Bounds().Dy())
-		overlay.Fill(color.RGBA{0, 0, 0, 225})
+		overlay.Fill(config.SemiTransparentBlack)
 		screen.DrawImage(overlay, nil)
 
 		dialogWidth, dialogHeight := 300, 150
 		dialogX := (screen.Bounds().Dx() - dialogWidth) / 2
 		dialogY := (screen.Bounds().Dy() - dialogHeight) / 2
 		dialog := ebiten.NewImage(dialogWidth, dialogHeight)
-		dialog.Fill(color.RGBA{25, 25, 25, 255})
+		dialog.Fill(config.ColourDarkGrey)
 
-		borderColor := color.RGBA{0, 0, 0, 255}
 		vector.DrawFilledRect(
 			dialog,
 			0,
 			0,
 			float32(dialogWidth),
 			5,
-			borderColor,
+			config.ColourBlack,
 			false,
 		)
 		vector.DrawFilledRect(
@@ -126,7 +124,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			float32(dialogHeight-5),
 			float32(dialogWidth),
 			5,
-			borderColor,
+			config.ColourBlack,
 			false,
 		)
 		vector.DrawFilledRect(
@@ -135,7 +133,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			0,
 			5,
 			float32(dialogHeight),
-			borderColor,
+			config.ColourBlack,
 			false,
 		)
 		vector.DrawFilledRect(
@@ -144,7 +142,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			0,
 			5,
 			float32(dialogHeight),
-			borderColor,
+			config.ColourBlack,
 			false,
 		)
 		op := &ebiten.DrawImageOptions{}

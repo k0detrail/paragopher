@@ -39,8 +39,8 @@ func (g *Game) drawParatrooper(screen *ebiten.Image, p *Paratrooper) {
 		vector.StrokeLine(
 			screen,
 			p.x-config.ParachuteRadius,
-			p.y,
-			p.x-config.ParachuteRadius/2.0,
+			p.y-config.ParachuteRadius,
+			p.x-config.ParatrooperWidth/2.0,
 			p.y,
 			1,
 			config.ColourTeal,
@@ -49,8 +49,8 @@ func (g *Game) drawParatrooper(screen *ebiten.Image, p *Paratrooper) {
 		vector.StrokeLine(
 			screen,
 			p.x+config.ParachuteRadius,
-			p.y,
-			p.x-config.ParachuteRadius/2.0,
+			p.y-config.ParachuteRadius,
+			p.x+config.ParatrooperWidth/2.0,
 			p.y,
 			1,
 			config.ColourTeal,

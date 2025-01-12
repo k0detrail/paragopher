@@ -23,27 +23,30 @@ const (
 
 	ParatrooperFallSpeed = 1.2
 	ParatrooperWalkSpeed = 0.5
-	ParatrooperWidth     = 4.0
-	ParatrooperHeight    = 6.0
-	ParachuteRadius      = 6.0
 
 	BulletSpeed  = 10.0
 	BulletRadius = 2.0
 	ShotCooldown = 200
 
-	GroundY = 580
+	GroundY = 600
 )
 
 var (
 	BaseW = float32(ScreenWidth) / 10.0
 	BaseH = float32(ScreenHeight) / 10.0
 
-	ColourTeal       = color.RGBA{R: 101, G: 247, B: 246, A: 255}
-	ColourPink       = color.RGBA{R: 255, G: 82, B: 242, A: 255}
-	ColourMagenta    = color.RGBA{255, 0, 255, 255}
-	ColourWhite      = color.RGBA{R: 255, G: 255, B: 255, A: 255}
-	ColourBlack      = color.RGBA{R: 0, G: 0, B: 0, A: 255}
-	TransparentBlack = color.RGBA{R: 0, G: 0, B: 0, A: 0}
+	ParatrooperWidth  = float32(10.0)
+	ParatrooperHeight = BaseH / 3.0
+	ParachuteRadius   = float32(10.0)
+
+	ColourTeal           = color.RGBA{R: 101, G: 247, B: 246, A: 255}
+	ColourPink           = color.RGBA{R: 255, G: 82, B: 242, A: 255}
+	ColourMagenta        = color.RGBA{255, 0, 255, 255}
+	ColourWhite          = color.RGBA{R: 255, G: 255, B: 255, A: 255}
+	ColourBlack          = color.RGBA{R: 0, G: 0, B: 0, A: 255}
+	ColourDarkGrey       = color.RGBA{R: 25, G: 25, B: 25, A: 255}
+	TransparentBlack     = color.RGBA{R: 0, G: 0, B: 0, A: 0}
+	SemiTransparentBlack = color.RGBA{R: 0, G: 0, B: 0, A: 225}
 
 	ErrQuit = errors.New("user quit the game")
 )
