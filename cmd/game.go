@@ -22,7 +22,6 @@ func main() {
 	}
 
 	g := game.NewGame(gameData.HiScore)
-
 	if err := ebiten.RunGame(g); err != nil {
 		if err == config.ErrQuit {
 			if g.Score > gameData.HiScore {
@@ -31,6 +30,8 @@ func main() {
 				utils.SaveData(gameData)
 			}
 			os.Exit(0)
+		}
+		if err == config.ErrGameOver {
 		}
 		log.Fatal(err)
 	}

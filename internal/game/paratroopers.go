@@ -11,9 +11,11 @@ import (
 )
 
 type Paratrooper struct {
-	x, y      float32
-	parachute bool
-	landed    bool
+	x, y        float32
+	parachute   bool
+	landed      bool
+	walking     bool
+	over, under *Paratrooper
 }
 
 // An ugly hack until vector.DrawFilledPath is available in Ebitengine
@@ -157,6 +159,7 @@ func (g *Game) updateParatroopers() {
 			if p.y >= config.GroundY-config.ParatrooperHeight {
 				p.y = config.GroundY - config.ParatrooperHeight
 				p.landed = true
+				p.walking = true
 				p.parachute = false
 			}
 		} else {
@@ -168,13 +171,13 @@ func (g *Game) updateParatroopers() {
 }
 
 func (g *Game) walk(p *Paratrooper) {
+	if g.showGameOverDialog {
+		return
+	}
 	vx := float32(config.ParatrooperWalkSpeed)
 	baseX := (config.ScreenWidth - config.BaseWidth) / 2
-	// baseY := config.ScreenHeight - config.BaseHeight
 	if p.x > float32(config.ScreenWidth)/2.0 {
 		vx = -vx
-		// baseX += config.BaseWidth
-		// baseY += config.BaseHeight
 	}
 	newX := p.x + vx
 	if utils.Overlap1D(
@@ -183,10 +186,22 @@ func (g *Game) walk(p *Paratrooper) {
 		baseX,
 		config.BaseWidth,
 	) {
-		return
+		if p.y >= config.ScreenHeight-config.BaseHeight {
+			p.walking = false
+			return
+		} else {
+			pinkBaseX := (float32(config.ScreenWidth) - config.BaseWidth/3.0) / 2.0
+			pinkBaseW := config.BaseWidth / 3
+			if utils.Overlap1D(p.x-config.ParatrooperWidth/2.0, config.ParatrooperWidth, pinkBaseX, pinkBaseW) {
+				g.showGameOverDialog = true
+			}
+		}
 	}
 	for _, q := range g.paratroopers {
-		if math.Abs(float64(q.x-p.x)) < 1e-6 || !q.landed {
+		if (math.Abs(float64(q.x-p.x)) < 1e-6 &&
+			math.Abs(float64(q.y-p.y)) < 1e-6) ||
+			!q.landed ||
+			q.walking {
 			continue
 		}
 		if utils.Overlap1D(
@@ -194,7 +209,18 @@ func (g *Game) walk(p *Paratrooper) {
 			config.ParatrooperWidth,
 			q.x-config.ParatrooperWidth/2.0,
 			config.ParatrooperWidth,
-		) {
+		) && math.Abs(float64(p.y-q.y)) < 1e-6 {
+			if q.over == nil {
+				p.x = q.x
+				p.y = q.y - config.ParatrooperHeight
+				q.over = p
+				if p.under != nil {
+					p.under.over = nil
+				}
+				p.under = q
+			} else {
+				p.walking = false
+			}
 			return
 		}
 	}

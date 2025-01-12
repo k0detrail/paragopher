@@ -11,10 +11,10 @@ import (
 )
 
 type Game struct {
-	Score          int
-	hiScore        int
-	gameOver       bool
-	showExitDialog bool
+	Score              int
+	hiScore            int
+	showExitDialog     bool
+	showGameOverDialog bool
 
 	barrelAngle float64
 	barrelImage *ebiten.Image
@@ -99,105 +99,131 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	)
 
 	if g.showExitDialog {
-		overlay := ebiten.NewImage(screen.Bounds().Dx(), screen.Bounds().Dy())
-		overlay.Fill(config.SemiTransparentBlack)
-		screen.DrawImage(overlay, nil)
+		showYesNoDialog(screen, "Do you want to exit the game?")
+	}
 
-		dialogWidth, dialogHeight := 300, 150
-		dialogX := (screen.Bounds().Dx() - dialogWidth) / 2
-		dialogY := (screen.Bounds().Dy() - dialogHeight) / 2
-		dialog := ebiten.NewImage(dialogWidth, dialogHeight)
-		dialog.Fill(config.ColourDarkGrey)
-
-		vector.DrawFilledRect(
-			dialog,
-			0,
-			0,
-			float32(dialogWidth),
-			5,
-			config.ColourBlack,
-			false,
-		)
-		vector.DrawFilledRect(
-			dialog,
-			0,
-			float32(dialogHeight-5),
-			float32(dialogWidth),
-			5,
-			config.ColourBlack,
-			false,
-		)
-		vector.DrawFilledRect(
-			dialog,
-			0,
-			0,
-			5,
-			float32(dialogHeight),
-			config.ColourBlack,
-			false,
-		)
-		vector.DrawFilledRect(
-			dialog,
-			float32(dialogWidth-5),
-			0,
-			5,
-			float32(dialogHeight),
-			config.ColourBlack,
-			false,
-		)
-		op := &ebiten.DrawImageOptions{}
-		op.GeoM.Translate(float64(dialogX), float64(dialogY))
-		screen.DrawImage(dialog, op)
-
-		msg := "Do you want to exit the game?"
-		textX := dialogX + 50
-		textY := dialogY + 40
-		ebitenutil.DebugPrintAt(screen, msg, textX, textY)
-
-		yesText := "Y: Yes"
-		noText := "N: No"
-		ebitenutil.DebugPrintAt(screen, yesText, dialogX+50, dialogY+90)
-		ebitenutil.DebugPrintAt(screen, noText, dialogX+200, dialogY+90)
+	if g.showGameOverDialog {
+		showYesNoDialog(screen, "GAME OVER!\nWould you like to start again?")
 	}
 }
 
 func (g *Game) Update() error {
-	if !g.showExitDialog {
-		if ebiten.IsKeyPressed(ebiten.KeyEscape) {
-			g.showExitDialog = true
-		}
-		if ebiten.IsKeyPressed(ebiten.KeyLeft) {
-			if g.barrelAngle > config.BarrelAngleMin {
-				g.barrelAngle--
-			}
-		}
-		if ebiten.IsKeyPressed(ebiten.KeyRight) {
-			if g.barrelAngle < config.BarrelAngleMax {
-				g.barrelAngle++
-			}
-		}
-		if ebiten.IsKeyPressed(ebiten.KeySpace) {
-			if time.Since(g.lastShot).Milliseconds() > config.ShotCooldown {
-				g.shoot()
-			}
-		}
-
-		g.updateBullets()
-		g.spawnHelicopter()
-		g.updateHelicopters()
-		g.updateParatroopers()
-		g.checkHits()
-	} else {
+	if g.showExitDialog {
 		if ebiten.IsKeyPressed(ebiten.KeyY) {
 			return config.ErrQuit
 		}
 		if ebiten.IsKeyPressed(ebiten.KeyN) {
 			g.showExitDialog = false
 		}
+		return nil
 	}
+	if g.showGameOverDialog {
+		if ebiten.IsKeyPressed(ebiten.KeyY) {
+			g.Reset()
+		}
+		if ebiten.IsKeyPressed(ebiten.KeyN) {
+			return config.ErrQuit
+		}
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyEscape) {
+		g.showExitDialog = true
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyLeft) {
+		if g.barrelAngle > config.BarrelAngleMin {
+			g.barrelAngle--
+		}
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyRight) {
+		if g.barrelAngle < config.BarrelAngleMax {
+			g.barrelAngle++
+		}
+	}
+	if ebiten.IsKeyPressed(ebiten.KeySpace) {
+		if time.Since(g.lastShot).Milliseconds() > config.ShotCooldown {
+			g.shoot()
+		}
+	}
+
+	g.updateBullets()
+	g.spawnHelicopter()
+	g.updateHelicopters()
+	g.updateParatroopers()
+	g.checkHits()
+
 	return nil
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 	return config.ScreenWidth, config.ScreenHeight
+}
+
+func (g *Game) Reset() {
+	g.Score = 0
+	g.showExitDialog = false
+	g.showGameOverDialog = false
+	g.barrelAngle = 0.0
+	g.bullets = nil
+	g.helicopters = nil
+	g.paratroopers = nil
+}
+
+func showYesNoDialog(screen *ebiten.Image, message string) {
+	overlay := ebiten.NewImage(screen.Bounds().Dx(), screen.Bounds().Dy())
+	overlay.Fill(config.SemiTransparentBlack)
+	screen.DrawImage(overlay, nil)
+
+	dialogWidth, dialogHeight := 300, 150
+	dialogX := (screen.Bounds().Dx() - dialogWidth) / 2
+	dialogY := (screen.Bounds().Dy() - dialogHeight) / 2
+	dialog := ebiten.NewImage(dialogWidth, dialogHeight)
+	dialog.Fill(config.ColourDarkGrey)
+
+	vector.DrawFilledRect(
+		dialog,
+		0,
+		0,
+		float32(dialogWidth),
+		5,
+		config.ColourBlack,
+		false,
+	)
+	vector.DrawFilledRect(
+		dialog,
+		0,
+		float32(dialogHeight-5),
+		float32(dialogWidth),
+		5,
+		config.ColourBlack,
+		false,
+	)
+	vector.DrawFilledRect(
+		dialog,
+		0,
+		0,
+		5,
+		float32(dialogHeight),
+		config.ColourBlack,
+		false,
+	)
+	vector.DrawFilledRect(
+		dialog,
+		float32(dialogWidth-5),
+		0,
+		5,
+		float32(dialogHeight),
+		config.ColourBlack,
+		false,
+	)
+	op := &ebiten.DrawImageOptions{}
+	op.GeoM.Translate(float64(dialogX), float64(dialogY))
+	screen.DrawImage(dialog, op)
+
+	textX := dialogX + 50
+	textY := dialogY + 40
+	ebitenutil.DebugPrintAt(screen, message, textX, textY)
+
+	yesText := "Y: Yes"
+	noText := "N: No"
+	ebitenutil.DebugPrintAt(screen, yesText, dialogX+50, dialogY+90)
+	ebitenutil.DebugPrintAt(screen, noText, dialogX+200, dialogY+90)
 }
