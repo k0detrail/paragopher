@@ -20,6 +20,7 @@ type Paratrooper struct {
 	onTopOf   *Paratrooper
 }
 
+// An ugly hack until vector.DrawFilledPath is available in Ebitengine
 func DrawFilledSemicircle(
 	screen *ebiten.Image,
 	centerX, centerY, radius float32,

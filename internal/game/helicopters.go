@@ -94,6 +94,10 @@ func (g *Game) updateHelicopters() {
 }
 
 func (g *Game) canDrop(x float32) bool {
+	if x < config.ParatrooperWidth/2.0 ||
+		x > config.ScreenWidth-config.ParatrooperWidth/2.0 {
+		return false
+	}
 	baseX := (config.ScreenWidth - config.BaseWidth) / 2.0
 	pX := x - config.ParatrooperWidth/2.0
 	if utils.Overlap1D(pX, config.ParatrooperWidth, baseX, config.BaseWidth) {
