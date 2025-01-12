@@ -20,32 +20,32 @@ type Helicopter struct {
 func (g *Game) drawHelicopter(screen *ebiten.Image, h *Helicopter) {
 	vector.DrawFilledRect(
 		screen,
-		h.x-config.HelicopterBodyW/2.0,
-		h.y-config.HelicopterBodyH/2.0,
-		config.HelicopterBodyW,
-		config.HelicopterBodyH,
+		h.x-config.HelicopterBodyWidth/2.0,
+		h.y-config.HelicopterBodyHeight/2.0,
+		config.HelicopterBodyWidth,
+		config.HelicopterBodyHeight,
 		config.ColourTeal,
 		false,
 	)
-	tailX := h.x - config.HelicopterBodyW
+	tailX := h.x - config.HelicopterBodyWidth
 	if h.vx < 0 {
-		tailX = h.x + config.HelicopterBodyW/2.0
+		tailX = h.x + config.HelicopterBodyWidth/2.0
 	}
 	vector.DrawFilledRect(
 		screen,
 		tailX,
-		h.y-config.HelicopterTailH/2.0,
-		config.HelicopterTailW,
-		config.HelicopterTailH,
+		h.y-config.HelicopterTailHeight/2.0,
+		config.HelicopterTailWidth,
+		config.HelicopterTailHeight,
 		config.ColourTeal,
 		false,
 	)
 	vector.StrokeLine(
 		screen,
 		h.x-config.HelicopterRotorLen/2.0,
-		h.y-config.HelicopterBodyH/2.0-2,
+		h.y-config.HelicopterBodyHeight/2.0-2,
 		h.x+config.HelicopterRotorLen/2.0,
-		h.y-config.HelicopterBodyH/2.0-2,
+		h.y-config.HelicopterBodyHeight/2.0-2,
 		1.0,
 		config.ColourMagenta,
 		false,
@@ -60,7 +60,9 @@ func (g *Game) drawHelicopters(screen *ebiten.Image) {
 
 func (g *Game) spawnHelicopter() {
 	if rand.Float32() < config.HelicopterSpawnChance {
-		startX := -float32(config.HelicopterBodyW + config.HelicopterTailW)
+		startX := -float32(
+			config.HelicopterBodyWidth + config.HelicopterTailWidth,
+		)
 		startY := float32(50 + rand.Intn(50))
 		vx := float32(config.HelicopterSpeed)
 		if rand.Intn(2) == 1 {

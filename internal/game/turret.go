@@ -128,10 +128,10 @@ bulletLoop:
 				b.y-config.BulletRadius/2.0,
 				config.BulletRadius,
 				config.BulletRadius,
-				h.x-config.HelicopterBodyW/2.0,
-				h.y-config.HelicopterBodyH/2.0,
-				config.HelicopterBodyW,
-				config.HelicopterBodyH,
+				h.x-config.HelicopterBodyWidth/2.0,
+				h.y-config.HelicopterBodyHeight/2.0,
+				config.HelicopterBodyWidth,
+				config.HelicopterBodyHeight,
 			) {
 				g.helicopters = append(g.helicopters[:i], g.helicopters[i+1:]...)
 				g.Score += 10

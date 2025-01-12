@@ -15,10 +15,10 @@ const (
 	HelicopterSpawnChance = 0.008
 	HelicopterSpeed       = 1.5
 	HelicopterDropRate    = 2
-	HelicopterBodyW       = 30.0
-	HelicopterBodyH       = 10.0
-	HelicopterTailW       = 16.0
-	HelicopterTailH       = 3.0
+	HelicopterBodyWidth   = 30.0
+	HelicopterBodyHeight  = 10.0
+	HelicopterTailWidth   = 16.0
+	HelicopterTailHeight  = 3.0
 	HelicopterRotorLen    = 20.0
 
 	ParatrooperSpawnChance = 0.01

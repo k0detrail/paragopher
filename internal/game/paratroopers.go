@@ -12,7 +12,6 @@ import (
 // Paratroopers
 type Paratrooper struct {
 	x, y      float32
-	vy        float32
 	parachute bool
 	landed    bool
 	onBase    bool
@@ -148,7 +147,6 @@ func (g *Game) spawnParatrooper(x, y float32) {
 	g.paratroopers = append(g.paratroopers, &Paratrooper{
 		x:         x,
 		y:         y,
-		vy:        config.ParatrooperFallSpeed,
 		parachute: true,
 		landed:    false,
 	})
@@ -158,7 +156,7 @@ func (g *Game) updateParatroopers() {
 	updated := make([]*Paratrooper, 0, len(g.paratroopers))
 	for _, p := range g.paratroopers {
 		if !p.landed {
-			p.y += p.vy
+			p.y += config.ParatrooperFallSpeed
 			if p.y >= config.GroundY-config.ParatrooperHeight {
 				p.y = config.GroundY - config.ParatrooperHeight
 				p.landed = true
