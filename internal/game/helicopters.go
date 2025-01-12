@@ -82,7 +82,7 @@ func (g *Game) updateHelicopters() {
 		h.x += h.vx
 		timePassed := time.Since(h.lastDrop)
 		if timePassed > config.HelicopterDropRate*time.Second &&
-			g.canDrop(h.x) {
+			g.canDrop(h.x) && rand.Float32() < config.ParatrooperSpawnChance {
 			g.spawnParatrooper(h.x, h.y)
 			h.lastDrop = time.Now()
 		}
