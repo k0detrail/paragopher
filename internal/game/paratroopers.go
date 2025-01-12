@@ -9,7 +9,6 @@ import (
 	"github.com/ystepanoff/paragopher/internal/config"
 )
 
-// Paratroopers
 type Paratrooper struct {
 	x, y      float32
 	parachute bool

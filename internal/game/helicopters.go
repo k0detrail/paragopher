@@ -10,11 +10,10 @@ import (
 	"github.com/ystepanoff/paragopher/internal/utils"
 )
 
-// Helicopters
 type Helicopter struct {
-	x, y     float32
-	vx       float32
-	lastDrop time.Time
+	x, y        float32
+	leftToRight bool
+	lastDrop    time.Time
 }
 
 func (g *Game) drawHelicopter(screen *ebiten.Image, h *Helicopter) {
@@ -28,7 +27,7 @@ func (g *Game) drawHelicopter(screen *ebiten.Image, h *Helicopter) {
 		false,
 	)
 	tailX := h.x - config.HelicopterBodyWidth
-	if h.vx < 0 {
+	if !h.leftToRight {
 		tailX = h.x + config.HelicopterBodyWidth/2.0
 	}
 	vector.DrawFilledRect(
@@ -64,16 +63,16 @@ func (g *Game) spawnHelicopter() {
 			config.HelicopterBodyWidth + config.HelicopterTailWidth,
 		)
 		startY := float32(50 + rand.Intn(50))
-		vx := float32(config.HelicopterSpeed)
+		leftToRight := true
 		if rand.Intn(2) == 1 {
 			startX = config.ScreenWidth - startX
-			vx = -vx
+			leftToRight = false
 		}
 		g.helicopters = append(g.helicopters, &Helicopter{
-			x:        startX,
-			y:        startY,
-			vx:       vx,
-			lastDrop: time.Now(),
+			x:           startX,
+			y:           startY,
+			leftToRight: leftToRight,
+			lastDrop:    time.Now(),
 		})
 	}
 }
@@ -81,7 +80,11 @@ func (g *Game) spawnHelicopter() {
 func (g *Game) updateHelicopters() {
 	active := make([]*Helicopter, 0, len(g.helicopters))
 	for _, h := range g.helicopters {
-		h.x += h.vx
+		vx := float32(config.HelicopterSpeed)
+		if !h.leftToRight {
+			vx = -vx
+		}
+		h.x += vx
 		timePassed := time.Since(h.lastDrop)
 		if timePassed > config.HelicopterDropRate*time.Second &&
 			g.canDrop(h.x) && rand.Float32() < config.ParatrooperSpawnChance {
