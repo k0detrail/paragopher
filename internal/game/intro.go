@@ -9,7 +9,9 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/examples/resources/fonts"
 	"github.com/hajimehoshi/ebiten/v2/text/v2"
+	"github.com/ystepanoff/paragopher/internal/audio"
 	"github.com/ystepanoff/paragopher/internal/config"
+	"github.com/ystepanoff/paragopher/resources"
 )
 
 const (
@@ -29,6 +31,8 @@ var colourLayers = []color.Color{
 }
 
 func (g *Game) initIntro() {
+	go audio.PlaySound(resources.IntroSoundBytes)
+
 	faceSource, err := text.NewGoTextFaceSource(
 		bytes.NewReader(fonts.PressStart2P_ttf),
 	)
