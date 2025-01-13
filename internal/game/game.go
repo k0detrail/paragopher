@@ -16,6 +16,10 @@ type Game struct {
 	Score    int
 	gameData *utils.GameData
 
+	showIntro     bool
+	introStep     int
+	lastIntroStep time.Time
+
 	showExitDialog     bool
 	showGameOverDialog bool
 
@@ -35,10 +39,13 @@ func NewGame() *Game {
 		gameData = &utils.GameData{}
 	}
 	game := &Game{
-		bullets:  make([]*Bullet, 0),
-		lastShot: time.Now(),
-		gameData: gameData,
+		bullets:   make([]*Bullet, 0),
+		lastShot:  time.Now(),
+		gameData:  gameData,
+		showIntro: true,
 	}
+	game.initIntro()
+
 	width := config.BaseWidth
 	game.barrelImage = ebiten.NewImage(int(width), int(width))
 	game.barrelImage.Fill(config.TransparentBlack)
@@ -94,6 +101,10 @@ func NewGame() *Game {
 
 // Ebiten Game Interface
 func (g *Game) Draw(screen *ebiten.Image) {
+	if g.showIntro {
+		g.drawIntro(screen)
+		return
+	}
 	g.drawTurret(screen)
 	g.drawBullets(screen)
 	g.drawHelicopters(screen)
@@ -115,6 +126,9 @@ func (g *Game) Draw(screen *ebiten.Image) {
 }
 
 func (g *Game) Update() error {
+	if g.showIntro {
+		return nil
+	}
 	if g.showExitDialog {
 		if ebiten.IsKeyPressed(ebiten.KeyY) {
 			utils.SaveData(g.gameData)
