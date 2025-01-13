@@ -1,3 +1,8 @@
+![Go Version](https://img.shields.io/github/go-mod/go-version/ystepanoff/ParaGopher)
+[![Issues](https://img.shields.io/github/issues/ystepanoff/ParaGopher)](https://github.com/ystepanoff/ParaGopher/issues)
+![License](https://img.shields.io/github/license/ystepanoff/ParaGopher)
+[![Powered by Ebiten](https://img.shields.io/badge/Powered%20By-Ebitengine™-1abc9c)](https://ebitengine.org/)
+
 # ParaGopher
 
 ![ParaGopher](./screenshot.png)
