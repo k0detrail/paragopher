@@ -2,6 +2,7 @@ package game
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -30,7 +31,7 @@ type Game struct {
 func NewGame() *Game {
 	gameData, err := utils.LoadData()
 	if err != nil {
-		fmt.Println("Error loading game data!")
+		log.Println("Error loading game data!")
 		gameData = &utils.GameData{}
 	}
 	game := &Game{
