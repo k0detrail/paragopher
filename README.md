@@ -22,4 +22,4 @@ go run cmd/game.go
 * Escape (`Esc`): Quit the game.
 
 ## Contributions
-Contributions are welcome! Whether it is reporting bugs, suggesting features, or submitting pull requests, your help is appreciated!
+Contributions are welcome! Whether it is reporting bugs, suggesting features, or submitting pull requests, your help is appreciated.
