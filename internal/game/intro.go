@@ -10,7 +10,6 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/examples/resources/fonts"
 	"github.com/hajimehoshi/ebiten/v2/text/v2"
 	"github.com/ystepanoff/paragopher/internal/config"
-	//"golang.org/x/image/font/basicfont"
 )
 
 const (
@@ -63,7 +62,7 @@ func (g *Game) drawIntro(screen *ebiten.Image) {
 	}
 
 	if g.introStep == len(introText) &&
-		time.Since(g.lastIntroStep).Seconds() > 3 {
+		time.Since(g.lastIntroStep).Seconds() > 2 {
 		g.showIntro = false
 	}
 }
