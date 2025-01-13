@@ -2,7 +2,7 @@
 
 ![ParaGopher](./screenshot.png)
 
-**ParaGopher** is a retro style arcade game written in Go using [Ebitengine](https://ebitengine.org). 
+**ParaGopher** is a retro-style arcade game written in Go using [Ebitengine](https://ebitengine.org). 
 Inspired by the classic [Paratrooper](https://en.wikipedia.org/wiki/Paratrooper_(video_game)) IBM PC game (1982),
 the game allows the player to control a turret that must defend the base against incoming paratroopers. Tilt the turret,
 shoot down threats, and prevent paratroopers from reaching your base!
