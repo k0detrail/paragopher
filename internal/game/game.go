@@ -44,6 +44,8 @@ func NewGame() *Game {
 		gameData:  gameData,
 		showIntro: true,
 	}
+	game.initIntro()
+
 	width := config.BaseWidth
 	game.barrelImage = ebiten.NewImage(int(width), int(width))
 	game.barrelImage.Fill(config.TransparentBlack)

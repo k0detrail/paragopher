@@ -1,13 +1,16 @@
 package game
 
 import (
+	"bytes"
 	"image/color"
+	"log"
 	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/text"
+	"github.com/hajimehoshi/ebiten/v2/examples/resources/fonts"
+	"github.com/hajimehoshi/ebiten/v2/text/v2"
 	"github.com/ystepanoff/paragopher/internal/config"
-	"golang.org/x/image/font/basicfont"
+	//"golang.org/x/image/font/basicfont"
 )
 
 const (
@@ -15,38 +18,52 @@ const (
 	scaleFactor = 4
 )
 
-func (g *Game) drawIntro(screen *ebiten.Image) {
-	message := ""
-	textWidth := 200
-	textHeight := 100
-	textImg := ebiten.NewImage(textWidth, textHeight)
-	textImg.Fill(color.Transparent)
+var (
+	fontFace     *text.GoTextFace = nil
+	textW, textH float64
+)
 
-	message = introText[:g.introStep]
+var colourLayers = []color.Color{
+	config.ColourDarkGrey,
+	config.ColourPink,
+	config.ColourTeal,
+}
 
-	face := basicfont.Face7x13
-
-	text.Draw(textImg, message, face, 33, 51, config.ColourDarkGrey)
-	text.Draw(textImg, message, face, 34, 50, config.ColourPink)
-	text.Draw(textImg, message, face, 35, 50, config.ColourTeal)
-
-	screen.Fill(config.ColourBlack) // Clear screen with black
-
-	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Scale(scaleFactor, scaleFactor) // Scale the text
-	op.GeoM.Translate(
-		(float64(config.ScreenWidth)-(float64(textImg.Bounds().Dx())*scaleFactor))/2,
-		(float64(config.ScreenHeight)-(float64(textImg.Bounds().Dy())*scaleFactor))/4,
+func (g *Game) initIntro() {
+	faceSource, err := text.NewGoTextFaceSource(
+		bytes.NewReader(fonts.PressStart2P_ttf),
 	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fontFace = &text.GoTextFace{
+		Source: faceSource,
+		Size:   32,
+	}
+	textW, textH = text.Measure(introText, fontFace, 1.0)
+}
 
-	screen.DrawImage(textImg, op)
+func (g *Game) drawIntro(screen *ebiten.Image) {
+	message := introText[:g.introStep]
 
-	if time.Since(g.lastIntroStep).Milliseconds() > 300 {
+	for i, colour := range colourLayers {
+		op := &text.DrawOptions{}
+		op.GeoM.Translate(
+			(config.ScreenWidth-textW)/2.0+float64((i-1)*5),
+			(config.ScreenHeight-textH)/2.0,
+		)
+		op.ColorScale.ScaleWithColor(colour)
+		text.Draw(screen, message, fontFace, op)
+	}
+
+	if g.introStep < len(introText) &&
+		time.Since(g.lastIntroStep).Milliseconds() > 300 {
 		g.introStep++
 		g.lastIntroStep = time.Now()
 	}
 
-	if g.introStep == len(introText)+1 {
+	if g.introStep == len(introText) &&
+		time.Since(g.lastIntroStep).Seconds() > 3 {
 		g.showIntro = false
 	}
 }
