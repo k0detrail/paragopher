@@ -20,4 +20,4 @@ release:
   github:
     owner: ystepanoff
     name: ParaGopher
-  prerelase: auto
+  prerelease: auto
