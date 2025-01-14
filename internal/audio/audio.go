@@ -6,23 +6,46 @@ import (
 
 	"github.com/hajimehoshi/ebiten/v2/audio"
 	"github.com/hajimehoshi/ebiten/v2/audio/vorbis"
+	"github.com/ystepanoff/paragopher/resources"
 )
 
-const sampleRate = 196000
+const sampleRate = 32000
 
-var audioContext *audio.Context = audio.NewContext(sampleRate)
+type SoundProfile struct {
+	ctx            *audio.Context
+	IntroPlayer    *audio.Player
+	ShootPlayer    *audio.Player
+	HitPlayer      *audio.Player
+	GameOverPlayer *audio.Player
+}
 
-func SoundPlayer(soundBytes []byte) *audio.Player {
+func getPlayer(ctx *audio.Context, soundBytes []byte) *audio.Player {
 	decoded, err := vorbis.DecodeWithSampleRate(
 		sampleRate,
 		bytes.NewReader(soundBytes),
 	)
 	if err != nil {
-		log.Fatalf("Faied to decode OGG: %v", err)
+		log.Fatalf("Failed to decode OGG: %v", err)
 	}
-	player, err := audioContext.NewPlayer(decoded)
+	player, err := ctx.NewPlayer(decoded)
 	if err != nil {
 		log.Fatalf("Failed to create player: %v", err)
 	}
 	return player
+}
+
+func NewSoundProfile() *SoundProfile {
+	ctx := audio.NewContext(sampleRate)
+	return &SoundProfile{
+		ctx:            ctx,
+		IntroPlayer:    getPlayer(ctx, resources.IntroSoundBytes),
+		ShootPlayer:    getPlayer(ctx, resources.ShootSoundBytes),
+		HitPlayer:      getPlayer(ctx, resources.HitSoundBytes),
+		GameOverPlayer: getPlayer(ctx, resources.GameOverSoundBytes),
+	}
+}
+
+func Play(player *audio.Player) {
+	player.Rewind()
+	player.Play()
 }

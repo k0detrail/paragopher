@@ -9,7 +9,6 @@ import (
 	"github.com/ystepanoff/paragopher/internal/audio"
 	"github.com/ystepanoff/paragopher/internal/config"
 	"github.com/ystepanoff/paragopher/internal/utils"
-	"github.com/ystepanoff/paragopher/resources"
 )
 
 type Bullet struct {
@@ -76,7 +75,7 @@ func (g *Game) drawBullets(screen *ebiten.Image) {
 }
 
 func (g *Game) shoot() {
-	go audio.SoundPlayer(resources.ShootSoundBytes).Play()
+	audio.Play(g.soundProfile.ShootPlayer)
 
 	barrelCircleX := float32(config.ScreenWidth) / 2.0
 	barrelCircleY := float32(config.ScreenHeight)
@@ -137,8 +136,7 @@ bulletLoop:
 				config.HelicopterBodyWidth,
 				config.HelicopterBodyHeight,
 			) {
-				go audio.SoundPlayer(resources.HitSoundBytes).Play()
-
+				audio.Play(g.soundProfile.HitPlayer)
 				g.helicopters = append(g.helicopters[:i], g.helicopters[i+1:]...)
 				g.Score += 10
 				continue bulletLoop
@@ -164,8 +162,7 @@ bulletLoop:
 				config.ParachuteRadius*2.0,
 				config.ParachuteRadius*2.0,
 			) {
-				go audio.SoundPlayer(resources.HitSoundBytes).Play()
-
+				audio.Play(g.soundProfile.HitPlayer)
 				g.paratroopers = append(g.paratroopers[:i], g.paratroopers[i+1:]...)
 				g.Score += 5
 				continue bulletLoop

@@ -6,24 +6,24 @@ import (
 	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/audio"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2/vector"
+	"github.com/ystepanoff/paragopher/internal/audio"
 	"github.com/ystepanoff/paragopher/internal/config"
 	"github.com/ystepanoff/paragopher/internal/utils"
 )
 
 type Game struct {
-	Score    int
-	gameData *utils.GameData
+	Score        int
+	gameData     *utils.GameData
+	soundProfile *audio.SoundProfile
 
 	showIntro     bool
 	introStep     int
 	lastIntroStep time.Time
 
-	showExitDialog      bool
-	showGameOverDialog  bool
-	gameOverSoundPlayer *audio.Player
+	showExitDialog     bool
+	showGameOverDialog bool
 
 	barrelAngle float64
 	barrelImage *ebiten.Image
@@ -41,10 +41,11 @@ func NewGame() *Game {
 		gameData = &utils.GameData{}
 	}
 	game := &Game{
-		bullets:   make([]*Bullet, 0),
-		lastShot:  time.Now(),
-		gameData:  gameData,
-		showIntro: true,
+		bullets:      make([]*Bullet, 0),
+		lastShot:     time.Now(),
+		gameData:     gameData,
+		soundProfile: audio.NewSoundProfile(),
+		showIntro:    true,
 	}
 	game.initIntro()
 
@@ -184,7 +185,7 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 }
 
 func (g *Game) Reset() {
-	_ = g.gameOverSoundPlayer.Close()
+	_ = g.soundProfile.GameOverPlayer.Close()
 	g.Score = 0
 	g.showExitDialog = false
 	g.showGameOverDialog = false

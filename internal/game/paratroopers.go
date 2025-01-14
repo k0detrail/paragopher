@@ -9,7 +9,6 @@ import (
 	"github.com/ystepanoff/paragopher/internal/audio"
 	"github.com/ystepanoff/paragopher/internal/config"
 	"github.com/ystepanoff/paragopher/internal/utils"
-	"github.com/ystepanoff/paragopher/resources"
 )
 
 type Paratrooper struct {
@@ -195,8 +194,7 @@ func (g *Game) walk(p *Paratrooper) {
 			pinkBaseX := (float32(config.ScreenWidth) - config.BaseWidth/3.0) / 2.0
 			pinkBaseW := config.BaseWidth / 3
 			if utils.Overlap1D(p.x-config.ParatrooperWidth/2.0, config.ParatrooperWidth, pinkBaseX, pinkBaseW) {
-				g.gameOverSoundPlayer = audio.SoundPlayer(resources.GameOverSoundBytes)
-				g.gameOverSoundPlayer.Play()
+				audio.Play(g.soundProfile.GameOverPlayer)
 				g.showGameOverDialog = true
 			}
 		}
