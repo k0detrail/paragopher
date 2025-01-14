@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/audio"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2/vector"
 	"github.com/ystepanoff/paragopher/internal/config"
@@ -20,8 +21,9 @@ type Game struct {
 	introStep     int
 	lastIntroStep time.Time
 
-	showExitDialog     bool
-	showGameOverDialog bool
+	showExitDialog      bool
+	showGameOverDialog  bool
+	gameOverSoundPlayer *audio.Player
 
 	barrelAngle float64
 	barrelImage *ebiten.Image
@@ -147,6 +149,7 @@ func (g *Game) Update() error {
 		if ebiten.IsKeyPressed(ebiten.KeyN) {
 			return config.ErrQuit
 		}
+		return nil
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyEscape) {
 		g.showExitDialog = true
@@ -181,6 +184,7 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 }
 
 func (g *Game) Reset() {
+	_ = g.gameOverSoundPlayer.Close()
 	g.Score = 0
 	g.showExitDialog = false
 	g.showGameOverDialog = false
