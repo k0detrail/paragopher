@@ -31,7 +31,7 @@ var colourLayers = []color.Color{
 }
 
 func (g *Game) initIntro() {
-	go audio.PlaySound(resources.IntroSoundBytes)
+	go audio.SoundPlayer(resources.IntroSoundBytes).Play()
 
 	faceSource, err := text.NewGoTextFaceSource(
 		bytes.NewReader(fonts.PressStart2P_ttf),

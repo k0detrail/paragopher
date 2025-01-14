@@ -12,7 +12,7 @@ const sampleRate = 196000
 
 var audioContext *audio.Context = audio.NewContext(sampleRate)
 
-func PlaySound(soundBytes []byte) {
+func SoundPlayer(soundBytes []byte) *audio.Player {
 	decoded, err := vorbis.DecodeWithSampleRate(
 		sampleRate,
 		bytes.NewReader(soundBytes),
@@ -24,5 +24,5 @@ func PlaySound(soundBytes []byte) {
 	if err != nil {
 		log.Fatalf("Failed to create player: %v", err)
 	}
-	player.Play()
+	return player
 }
