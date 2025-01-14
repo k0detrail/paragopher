@@ -84,57 +84,71 @@ func DrawFilledSemicircle(
 	screen.DrawTriangles(vertices, indices, meshImg, nil)
 }
 
+func (g *Game) initParatrooperImage() {
+	w := int(math.Max(
+		float64(config.ParachuteRadius*2.0),
+		float64(config.ParatrooperWidth),
+	))
+	h := int(config.ParachuteRadius*2 + config.ParatrooperHeight)
+	g.paratrooperImage = ebiten.NewImage(w, h)
+	DrawFilledSemicircle(
+		g.paratrooperImage,
+		float32(w)/2.0,
+		config.ParachuteRadius,
+		config.ParachuteRadius,
+		-180.0,
+		0.0,
+		config.ColourTeal,
+	)
+	vector.DrawFilledRect(
+		g.paratrooperImage,
+		(float32(w)-config.ParatrooperWidth)/2.0,
+		config.ParachuteRadius*2.0,
+		float32(w)-config.ParatrooperWidth,
+		float32(h),
+		config.ColourTeal,
+		false,
+	)
+	vector.StrokeLine(
+		g.paratrooperImage,
+		2.0,
+		config.ParachuteRadius,
+		(float32(w)-config.ParatrooperWidth)/2.0+1.0,
+		config.ParachuteRadius*2.0,
+		1.0,
+		config.ColourTeal,
+		false,
+	)
+	vector.StrokeLine(
+		g.paratrooperImage,
+		float32(w)-2.0,
+		config.ParachuteRadius,
+		float32(w)-(float32(w)-config.ParatrooperWidth)/2.0-1.0,
+		config.ParachuteRadius*2.0,
+		1.0,
+		config.ColourTeal,
+		false,
+	)
+}
+
+func (g *Game) initParatrooperLandedImage() {
+	g.paratrooperLandedImage = ebiten.NewImage(
+		int(config.ParatrooperWidth),
+		int(config.ParatrooperHeight),
+	)
+	g.paratrooperLandedImage.Fill(config.ColourTeal)
+}
+
 func (g *Game) drawParatrooper(screen *ebiten.Image, p *Paratrooper) {
-	if !p.landed && p.parachute {
-		DrawFilledSemicircle(
-			screen,
-			p.x,
-			p.y-config.ParachuteRadius,
-			config.ParachuteRadius,
-			-180.0,
-			0.0,
-			config.ColourTeal,
-		)
-		vector.StrokeLine(
-			screen,
-			p.x-config.ParachuteRadius+2.0,
-			p.y-config.ParachuteRadius,
-			p.x-config.ParatrooperWidth/2.0+1.0,
-			p.y+1.0,
-			1,
-			config.ColourTeal,
-			false,
-		)
-		vector.StrokeLine(
-			screen,
-			p.x+config.ParachuteRadius-2.0,
-			p.y-config.ParachuteRadius,
-			p.x+config.ParatrooperWidth/2.0-1.0,
-			p.y+1.0,
-			1,
-			config.ColourTeal,
-			false,
-		)
-		vector.DrawFilledRect(
-			screen,
-			p.x-config.ParatrooperWidth/2.0,
-			p.y,
-			config.ParatrooperWidth,
-			config.ParatrooperHeight,
-			config.ColourTeal,
-			false,
-		)
-	} else {
-		vector.DrawFilledRect(
-			screen,
-			p.x-config.ParatrooperWidth/2.0,
-			p.y,
-			config.ParatrooperWidth,
-			config.ParatrooperHeight,
-			config.ColourTeal,
-			false,
-		)
+	image := g.paratrooperImage
+	if p.landed || !p.parachute {
+		image = g.paratrooperLandedImage
 	}
+	op := &ebiten.DrawImageOptions{}
+	dx := float64(image.Bounds().Dx())
+	dy := float64(image.Bounds().Dy())
+	op.GeoM.Translate(float64(p.x)-dx/2.0, float64(p.y)-dy/2.0)
+	screen.DrawImage(image, op)
 }
 
 func (g *Game) drawParatroopers(screen *ebiten.Image) {
@@ -157,8 +171,9 @@ func (g *Game) updateParatroopers() {
 	for _, p := range g.paratroopers {
 		if !p.landed {
 			p.y += config.ParatrooperFallSpeed
-			if p.y >= config.GroundY-config.ParatrooperHeight {
-				p.y = config.GroundY - config.ParatrooperHeight
+			dy := float32(g.paratrooperLandedImage.Bounds().Dy()) / 2.0
+			if p.y >= config.GroundY-dy {
+				p.y = config.GroundY - dy
 				p.landed = true
 				p.walking = true
 				p.parachute = false

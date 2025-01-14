@@ -25,10 +25,11 @@ type Game struct {
 	showExitDialog     bool
 	showGameOverDialog bool
 
-	barrelAngle float64
-	barrelImage *ebiten.Image
-
-	helicopterImage *ebiten.Image
+	barrelAngle            float64
+	barrelImage            *ebiten.Image
+	helicopterImage        *ebiten.Image
+	paratrooperImage       *ebiten.Image
+	paratrooperLandedImage *ebiten.Image
 
 	bullets      []*Bullet
 	lastShot     time.Time
@@ -49,7 +50,9 @@ func NewGame() *Game {
 		soundProfile: audio.NewSoundProfile(),
 		showIntro:    true,
 	}
-	game.prepareHelicopterImage()
+	game.initHelicopterImage()
+	game.initParatrooperImage()
+	game.initParatrooperLandedImage()
 	game.initIntro()
 
 	width := config.BaseWidth

@@ -16,7 +16,7 @@ type Helicopter struct {
 	lastDrop    time.Time
 }
 
-func (g *Game) prepareHelicopterImage() {
+func (g *Game) initHelicopterImage() {
 	w := int(config.HelicopterBodyWidth + config.HelicopterTailWidth)
 	h := int(config.HelicopterBodyHeight) + 6
 	g.helicopterImage = ebiten.NewImage(w, h)
