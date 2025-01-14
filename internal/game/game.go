@@ -28,6 +28,8 @@ type Game struct {
 	barrelAngle float64
 	barrelImage *ebiten.Image
 
+	helicopterImage *ebiten.Image
+
 	bullets      []*Bullet
 	lastShot     time.Time
 	helicopters  []*Helicopter
@@ -47,6 +49,7 @@ func NewGame() *Game {
 		soundProfile: audio.NewSoundProfile(),
 		showIntro:    true,
 	}
+	game.prepareHelicopterImage()
 	game.initIntro()
 
 	width := config.BaseWidth
@@ -185,7 +188,7 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 }
 
 func (g *Game) Reset() {
-	_ = g.soundProfile.GameOverPlayer.Close()
+	g.soundProfile.GameOverPlayer.Pause()
 	g.Score = 0
 	g.showExitDialog = false
 	g.showGameOverDialog = false

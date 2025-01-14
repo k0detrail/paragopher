@@ -131,10 +131,10 @@ bulletLoop:
 				b.y-config.BulletRadius/2.0,
 				config.BulletRadius,
 				config.BulletRadius,
-				h.x-config.HelicopterBodyWidth/2.0,
-				h.y-config.HelicopterBodyHeight/2.0,
-				config.HelicopterBodyWidth,
-				config.HelicopterBodyHeight,
+				h.x-float32(g.helicopterImage.Bounds().Dx())/2.0,
+				h.y-float32(g.helicopterImage.Bounds().Dy())/2.0,
+				float32(g.helicopterImage.Bounds().Dx()),
+				float32(g.helicopterImage.Bounds().Dy()),
 			) {
 				audio.Play(g.soundProfile.HitPlayer)
 				g.helicopters = append(g.helicopters[:i], g.helicopters[i+1:]...)

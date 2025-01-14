@@ -16,39 +16,63 @@ type Helicopter struct {
 	lastDrop    time.Time
 }
 
-func (g *Game) drawHelicopter(screen *ebiten.Image, h *Helicopter) {
+func (g *Game) prepareHelicopterImage() {
+	w := int(config.HelicopterBodyWidth + config.HelicopterTailWidth)
+	h := int(config.HelicopterBodyHeight) + 6
+	g.helicopterImage = ebiten.NewImage(w, h)
+	tailX := float32(0.0)
+	tailY := float32(h-config.HelicopterTailHeight) / 2
+	bodyX := float32(config.HelicopterTailWidth)
+	bodyY := float32(h-config.HelicopterBodyHeight) / 2
+
 	vector.DrawFilledRect(
-		screen,
-		h.x-config.HelicopterBodyWidth/2.0,
-		h.y-config.HelicopterBodyHeight/2.0,
-		config.HelicopterBodyWidth,
-		config.HelicopterBodyHeight,
-		config.ColourTeal,
-		false,
-	)
-	tailX := h.x - config.HelicopterBodyWidth
-	if !h.leftToRight {
-		tailX = h.x + config.HelicopterBodyWidth/2.0
-	}
-	vector.DrawFilledRect(
-		screen,
+		g.helicopterImage,
 		tailX,
-		h.y-config.HelicopterTailHeight/2.0,
+		tailY,
 		config.HelicopterTailWidth,
 		config.HelicopterTailHeight,
 		config.ColourTeal,
 		false,
 	)
+
+	vector.DrawFilledRect(
+		g.helicopterImage,
+		bodyX,
+		bodyY,
+		config.HelicopterBodyWidth,
+		config.HelicopterBodyHeight,
+		config.ColourTeal,
+		false,
+	)
+
+	bodyCenterX := bodyX + config.HelicopterBodyWidth/2.0
+	bodyTopY := bodyY
+	rotorStartX := bodyCenterX - config.HelicopterRotorLen/2.0
+	rotorStartY := bodyTopY - 2.0
+	rotorEndX := bodyCenterX + config.HelicopterRotorLen/2.0
+	rotorEndY := rotorStartY
 	vector.StrokeLine(
-		screen,
-		h.x-config.HelicopterRotorLen/2.0,
-		h.y-config.HelicopterBodyHeight/2.0-2,
-		h.x+config.HelicopterRotorLen/2.0,
-		h.y-config.HelicopterBodyHeight/2.0-2,
+		g.helicopterImage,
+		rotorStartX,
+		rotorStartY,
+		rotorEndX,
+		rotorEndY,
 		1.0,
 		config.ColourMagenta,
 		false,
 	)
+}
+
+func (g *Game) drawHelicopter(screen *ebiten.Image, h *Helicopter) {
+	op := &ebiten.DrawImageOptions{}
+	dx := float64(g.helicopterImage.Bounds().Dx())
+	dy := float64(g.helicopterImage.Bounds().Dy())
+	if !h.leftToRight {
+		op.GeoM.Scale(-1.0, 1.0)
+		op.GeoM.Translate(dx, 0.0)
+	}
+	op.GeoM.Translate(float64(h.x)-dx/2.0, float64(h.y)-dy/2.0)
+	screen.DrawImage(g.helicopterImage, op)
 }
 
 func (g *Game) drawHelicopters(screen *ebiten.Image) {
