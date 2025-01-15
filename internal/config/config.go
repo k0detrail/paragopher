@@ -22,7 +22,7 @@ const (
 	HelicopterTailHeight  = 3.0
 	HelicopterRotorLen    = 20.0
 
-	ParatrooperSpawnChance = 0.005
+	ParatrooperSpawnChance = 0.008
 	ParatrooperFallSpeed   = 0.6
 	ParatrooperWalkSpeed   = 0.25
 

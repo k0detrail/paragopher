@@ -92,6 +92,19 @@ func (g *Game) initBarrelImage() {
 	)
 }
 
+func (g *Game) initBulletImage() {
+	w := int(2 * config.BulletRadius)
+	g.bulletImage = ebiten.NewImage(w, w)
+	vector.DrawFilledCircle(
+		g.bulletImage,
+		config.BulletRadius,
+		config.BulletRadius,
+		config.BulletRadius,
+		config.ColourWhite,
+		true,
+	)
+}
+
 func (g *Game) drawTurret(screen *ebiten.Image) {
 	op := &ebiten.DrawImageOptions{}
 	op.GeoM.Translate(
@@ -116,14 +129,12 @@ func (g *Game) drawTurret(screen *ebiten.Image) {
 
 func (g *Game) drawBullets(screen *ebiten.Image) {
 	for _, b := range g.bullets {
-		vector.DrawFilledCircle(
-			screen,
-			b.x,
-			b.y,
-			config.BulletRadius,
-			config.ColourWhite,
-			false,
+		op := &ebiten.DrawImageOptions{}
+		op.GeoM.Translate(
+			float64(b.x-config.BulletRadius/2.0),
+			float64(b.y-config.BulletRadius/2.0),
 		)
+		screen.DrawImage(g.bulletImage, op)
 	}
 }
 

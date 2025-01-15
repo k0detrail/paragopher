@@ -31,6 +31,7 @@ type Game struct {
 	helicopterImage        *ebiten.Image
 	paratrooperImage       *ebiten.Image
 	paratrooperLandedImage *ebiten.Image
+	bulletImage            *ebiten.Image
 
 	bullets      []*Bullet
 	lastShot     time.Time
@@ -53,6 +54,7 @@ func NewGame() *Game {
 	}
 	game.initTurretImage()
 	game.initBarrelImage()
+	game.initBulletImage()
 	game.initHelicopterImage()
 	game.initParatrooperImage()
 	game.initParatrooperLandedImage()
