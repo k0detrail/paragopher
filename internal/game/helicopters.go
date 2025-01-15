@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/vector"
 	"github.com/ystepanoff/paragopher/internal/config"
 	"github.com/ystepanoff/paragopher/internal/utils"
 )
@@ -14,53 +13,6 @@ type Helicopter struct {
 	x, y        float32
 	leftToRight bool
 	lastDrop    time.Time
-}
-
-func (g *Game) initHelicopterImage() {
-	w := int(config.HelicopterBodyWidth + config.HelicopterTailWidth)
-	h := int(config.HelicopterBodyHeight) + 6
-	g.helicopterImage = ebiten.NewImage(w, h)
-	tailX := float32(0.0)
-	tailY := float32(h-config.HelicopterTailHeight) / 2
-	bodyX := float32(config.HelicopterTailWidth)
-	bodyY := float32(h-config.HelicopterBodyHeight) / 2
-
-	vector.DrawFilledRect(
-		g.helicopterImage,
-		tailX,
-		tailY,
-		config.HelicopterTailWidth,
-		config.HelicopterTailHeight,
-		config.ColourTeal,
-		false,
-	)
-
-	vector.DrawFilledRect(
-		g.helicopterImage,
-		bodyX,
-		bodyY,
-		config.HelicopterBodyWidth,
-		config.HelicopterBodyHeight,
-		config.ColourTeal,
-		false,
-	)
-
-	bodyCenterX := bodyX + config.HelicopterBodyWidth/2.0
-	bodyTopY := bodyY
-	rotorStartX := bodyCenterX - config.HelicopterRotorLen/2.0
-	rotorStartY := bodyTopY - 2.0
-	rotorEndX := bodyCenterX + config.HelicopterRotorLen/2.0
-	rotorEndY := rotorStartY
-	vector.StrokeLine(
-		g.helicopterImage,
-		rotorStartX,
-		rotorStartY,
-		rotorEndX,
-		rotorEndY,
-		1.0,
-		config.ColourMagenta,
-		false,
-	)
 }
 
 func (g *Game) drawHelicopter(screen *ebiten.Image, h *Helicopter) {

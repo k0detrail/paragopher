@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/vector"
 	"github.com/ystepanoff/paragopher/internal/audio"
 	"github.com/ystepanoff/paragopher/internal/config"
 	"github.com/ystepanoff/paragopher/internal/utils"
@@ -14,95 +13,6 @@ import (
 type Bullet struct {
 	x, y   float32
 	vx, vy float32
-}
-
-func (g *Game) initTurretImage() {
-	w := int(config.BaseWidth)
-	h := int(config.BaseWidth/3.0 + config.BaseHeight + 1.0)
-	g.turretBaseImage = ebiten.NewImage(w, h)
-	g.turretBaseImage.Fill(config.TransparentBlack)
-	vector.DrawFilledRect(
-		g.turretBaseImage,
-		0.0,
-		float32(h)-config.BaseHeight,
-		config.BaseWidth,
-		config.BaseHeight,
-		config.ColourWhite,
-		true,
-	)
-	vector.DrawFilledRect(
-		g.turretBaseImage,
-		config.BaseWidth/3.0,
-		0.0,
-		config.BaseWidth/3.0,
-		config.BaseWidth/3.0,
-		config.ColourPink,
-		false,
-	)
-}
-
-func (g *Game) initBarrelImage() {
-	w := config.BaseWidth
-	g.barrelImage = ebiten.NewImage(int(w), int(w))
-	g.barrelImage.Fill(config.TransparentBlack)
-
-	rectX := w/2 - w/12
-	rectY := w / 12
-	rectW := w / 6
-	rectH := w / 3
-	vector.DrawFilledRect(
-		g.barrelImage,
-		rectX,
-		rectY,
-		rectW,
-		rectH,
-		config.ColourTeal,
-		false,
-	)
-
-	circleX := w / 2
-	circleY := w / 2
-	pinkCircleRadius := w / 6
-	tealCircleRaduis := w / 24
-	vector.DrawFilledCircle(
-		g.barrelImage,
-		circleX,
-		circleY,
-		pinkCircleRadius,
-		config.ColourPink,
-		true,
-	)
-	vector.DrawFilledCircle(
-		g.barrelImage,
-		circleX,
-		circleY,
-		tealCircleRaduis,
-		config.ColourTeal,
-		true,
-	)
-	topCircleX, topCircleY := w/2, w/12
-	topCircleRadius := w / 12
-	vector.DrawFilledCircle(
-		g.barrelImage,
-		topCircleX,
-		topCircleY,
-		topCircleRadius,
-		config.ColourTeal,
-		true,
-	)
-}
-
-func (g *Game) initBulletImage() {
-	w := int(2 * config.BulletRadius)
-	g.bulletImage = ebiten.NewImage(w, w)
-	vector.DrawFilledCircle(
-		g.bulletImage,
-		config.BulletRadius,
-		config.BulletRadius,
-		config.BulletRadius,
-		config.ColourWhite,
-		true,
-	)
 }
 
 func (g *Game) drawTurret(screen *ebiten.Image) {
