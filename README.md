@@ -20,6 +20,9 @@ cd ParaGopher
 go run cmd/game.go
 ```
 
+Alternatively, visit the [Releases](https://github.com/ystepanoff/ParaGopher/releases) section, which contains pre-built binaries
+for some platforms.
+
 ## Controls
 * Left Arrow (`←`): Rotate turret barrel to the left.
 * Right Arrow (`→`): Rotate turret barrel to the right.
