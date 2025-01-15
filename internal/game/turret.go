@@ -16,38 +16,91 @@ type Bullet struct {
 	vx, vy float32
 }
 
-func (g *Game) drawTurret(screen *ebiten.Image) {
-	screen.Fill(config.ColourBlack)
-	baseX := (config.ScreenWidth - config.BaseWidth) / 2
-	baseY := config.ScreenHeight - config.BaseHeight
+func (g *Game) initTurretImage() {
+	w := int(config.BaseWidth)
+	h := int(config.BaseWidth/3.0 + config.BaseHeight + 1.0)
+	g.turretBaseImage = ebiten.NewImage(w, h)
+	g.turretBaseImage.Fill(config.TransparentBlack)
 	vector.DrawFilledRect(
-		screen,
-		baseX,
-		baseY,
+		g.turretBaseImage,
+		0.0,
+		float32(h)-config.BaseHeight,
 		config.BaseWidth,
 		config.BaseHeight,
 		config.ColourWhite,
-		false,
+		true,
 	)
-
-	pinkBaseX := (float32(config.ScreenWidth) - config.BaseWidth/3.0) / 2.0
-	pinkBaseY := float32(config.ScreenHeight)
-	pinkBaseY -= config.BaseHeight
-	pinkBaseY -= config.BaseWidth / 3
-	pinkBaseW := config.BaseWidth / 3
-	pinkBaseH := config.BaseWidth / 3
-
 	vector.DrawFilledRect(
-		screen,
-		pinkBaseX,
-		pinkBaseY,
-		pinkBaseW,
-		pinkBaseH,
+		g.turretBaseImage,
+		config.BaseWidth/3.0,
+		0.0,
+		config.BaseWidth/3.0,
+		config.BaseWidth/3.0,
 		config.ColourPink,
 		false,
 	)
+}
 
+func (g *Game) initBarrelImage() {
+	w := config.BaseWidth
+	g.barrelImage = ebiten.NewImage(int(w), int(w))
+	g.barrelImage.Fill(config.TransparentBlack)
+
+	rectX := w/2 - w/12
+	rectY := w / 12
+	rectW := w / 6
+	rectH := w / 3
+	vector.DrawFilledRect(
+		g.barrelImage,
+		rectX,
+		rectY,
+		rectW,
+		rectH,
+		config.ColourTeal,
+		false,
+	)
+
+	circleX := w / 2
+	circleY := w / 2
+	pinkCircleRadius := w / 6
+	tealCircleRaduis := w / 24
+	vector.DrawFilledCircle(
+		g.barrelImage,
+		circleX,
+		circleY,
+		pinkCircleRadius,
+		config.ColourPink,
+		true,
+	)
+	vector.DrawFilledCircle(
+		g.barrelImage,
+		circleX,
+		circleY,
+		tealCircleRaduis,
+		config.ColourTeal,
+		true,
+	)
+	topCircleX, topCircleY := w/2, w/12
+	topCircleRadius := w / 12
+	vector.DrawFilledCircle(
+		g.barrelImage,
+		topCircleX,
+		topCircleY,
+		topCircleRadius,
+		config.ColourTeal,
+		true,
+	)
+}
+
+func (g *Game) drawTurret(screen *ebiten.Image) {
 	op := &ebiten.DrawImageOptions{}
+	op.GeoM.Translate(
+		float64(config.ScreenWidth-config.BaseWidth)/2.0,
+		float64(config.ScreenHeight-g.turretBaseImage.Bounds().Dy()),
+	)
+	screen.DrawImage(g.turretBaseImage, op)
+
+	op = &ebiten.DrawImageOptions{}
 	centerX := float64(config.ScreenWidth) / 2.0
 	centerY := float64(config.ScreenHeight)
 	centerY -= float64(config.BaseHeight)

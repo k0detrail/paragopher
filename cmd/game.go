@@ -12,6 +12,7 @@ import (
 func main() {
 	ebiten.SetWindowSize(config.ScreenWidth, config.ScreenHeight)
 	ebiten.SetWindowTitle("ParaGopher")
+	ebiten.SetTPS(120)
 
 	g := game.NewGame()
 	if err := ebiten.RunGame(g); err != nil {

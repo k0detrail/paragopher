@@ -9,11 +9,12 @@ const (
 	ScreenWidth  = 800
 	ScreenHeight = 600
 
-	BarrelAngleMin = -70.0
-	BarrelAngleMax = 70.0
+	BarrelAngleMin  = -70.0
+	BarrelAngleMax  = 70.0
+	BarrelAngleStep = 0.5
 
-	HelicopterSpawnChance = 0.008
-	HelicopterSpeed       = 1.5
+	HelicopterSpawnChance = 0.004
+	HelicopterSpeed       = 0.75
 	HelicopterDropRate    = 2
 	HelicopterBodyWidth   = 30.0
 	HelicopterBodyHeight  = 10.0
@@ -21,11 +22,11 @@ const (
 	HelicopterTailHeight  = 3.0
 	HelicopterRotorLen    = 20.0
 
-	ParatrooperSpawnChance = 0.01
-	ParatrooperFallSpeed   = 1.2
-	ParatrooperWalkSpeed   = 0.5
+	ParatrooperSpawnChance = 0.005
+	ParatrooperFallSpeed   = 0.6
+	ParatrooperWalkSpeed   = 0.25
 
-	BulletSpeed  = 10.0
+	BulletSpeed  = 5.0
 	BulletRadius = 2.0
 	ShotCooldown = 200
 
