@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/vector"
 	"github.com/ystepanoff/paragopher/internal/audio"
 	"github.com/ystepanoff/paragopher/internal/config"
 	"github.com/ystepanoff/paragopher/internal/utils"
@@ -17,37 +16,14 @@ type Bullet struct {
 }
 
 func (g *Game) drawTurret(screen *ebiten.Image) {
-	screen.Fill(config.ColourBlack)
-	baseX := (config.ScreenWidth - config.BaseWidth) / 2
-	baseY := config.ScreenHeight - config.BaseHeight
-	vector.DrawFilledRect(
-		screen,
-		baseX,
-		baseY,
-		config.BaseWidth,
-		config.BaseHeight,
-		config.ColourWhite,
-		false,
-	)
-
-	pinkBaseX := (float32(config.ScreenWidth) - config.BaseWidth/3.0) / 2.0
-	pinkBaseY := float32(config.ScreenHeight)
-	pinkBaseY -= config.BaseHeight
-	pinkBaseY -= config.BaseWidth / 3
-	pinkBaseW := config.BaseWidth / 3
-	pinkBaseH := config.BaseWidth / 3
-
-	vector.DrawFilledRect(
-		screen,
-		pinkBaseX,
-		pinkBaseY,
-		pinkBaseW,
-		pinkBaseH,
-		config.ColourPink,
-		false,
-	)
-
 	op := &ebiten.DrawImageOptions{}
+	op.GeoM.Translate(
+		float64(config.ScreenWidth-config.BaseWidth)/2.0,
+		float64(config.ScreenHeight-g.turretBaseImage.Bounds().Dy()),
+	)
+	screen.DrawImage(g.turretBaseImage, op)
+
+	op = &ebiten.DrawImageOptions{}
 	centerX := float64(config.ScreenWidth) / 2.0
 	centerY := float64(config.ScreenHeight)
 	centerY -= float64(config.BaseHeight)
@@ -63,14 +39,12 @@ func (g *Game) drawTurret(screen *ebiten.Image) {
 
 func (g *Game) drawBullets(screen *ebiten.Image) {
 	for _, b := range g.bullets {
-		vector.DrawFilledCircle(
-			screen,
-			b.x,
-			b.y,
-			config.BulletRadius,
-			config.ColourWhite,
-			false,
+		op := &ebiten.DrawImageOptions{}
+		op.GeoM.Translate(
+			float64(b.x-config.BulletRadius/2.0),
+			float64(b.y-config.BulletRadius/2.0),
 		)
+		screen.DrawImage(g.bulletImage, op)
 	}
 }
 
@@ -131,10 +105,10 @@ bulletLoop:
 				b.y-config.BulletRadius/2.0,
 				config.BulletRadius,
 				config.BulletRadius,
-				h.x-config.HelicopterBodyWidth/2.0,
-				h.y-config.HelicopterBodyHeight/2.0,
-				config.HelicopterBodyWidth,
-				config.HelicopterBodyHeight,
+				h.x-float32(g.helicopterImage.Bounds().Dx())/2.0,
+				h.y-float32(g.helicopterImage.Bounds().Dy())/2.0,
+				float32(g.helicopterImage.Bounds().Dx()),
+				float32(g.helicopterImage.Bounds().Dy()),
 			) {
 				audio.Play(g.soundProfile.HitPlayer)
 				g.helicopters = append(g.helicopters[:i], g.helicopters[i+1:]...)

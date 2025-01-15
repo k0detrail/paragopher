@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/vector"
 	"github.com/ystepanoff/paragopher/internal/config"
 	"github.com/ystepanoff/paragopher/internal/utils"
 )
@@ -17,38 +16,15 @@ type Helicopter struct {
 }
 
 func (g *Game) drawHelicopter(screen *ebiten.Image, h *Helicopter) {
-	vector.DrawFilledRect(
-		screen,
-		h.x-config.HelicopterBodyWidth/2.0,
-		h.y-config.HelicopterBodyHeight/2.0,
-		config.HelicopterBodyWidth,
-		config.HelicopterBodyHeight,
-		config.ColourTeal,
-		false,
-	)
-	tailX := h.x - config.HelicopterBodyWidth
+	op := &ebiten.DrawImageOptions{}
+	dx := float64(g.helicopterImage.Bounds().Dx())
+	dy := float64(g.helicopterImage.Bounds().Dy())
 	if !h.leftToRight {
-		tailX = h.x + config.HelicopterBodyWidth/2.0
+		op.GeoM.Scale(-1.0, 1.0)
+		op.GeoM.Translate(dx, 0.0)
 	}
-	vector.DrawFilledRect(
-		screen,
-		tailX,
-		h.y-config.HelicopterTailHeight/2.0,
-		config.HelicopterTailWidth,
-		config.HelicopterTailHeight,
-		config.ColourTeal,
-		false,
-	)
-	vector.StrokeLine(
-		screen,
-		h.x-config.HelicopterRotorLen/2.0,
-		h.y-config.HelicopterBodyHeight/2.0-2,
-		h.x+config.HelicopterRotorLen/2.0,
-		h.y-config.HelicopterBodyHeight/2.0-2,
-		1.0,
-		config.ColourMagenta,
-		false,
-	)
+	op.GeoM.Translate(float64(h.x)-dx/2.0, float64(h.y)-dy/2.0)
+	screen.DrawImage(g.helicopterImage, op)
 }
 
 func (g *Game) drawHelicopters(screen *ebiten.Image) {
