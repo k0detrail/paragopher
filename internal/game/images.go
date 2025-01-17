@@ -264,3 +264,11 @@ func (g *Game) initParatrooperLandedImage() {
 	)
 	g.paratrooperLandedImage.Fill(config.ColourTeal)
 }
+
+func (g *Game) initParatrooperFellImage() {
+	g.paratrooperFellImage = ebiten.NewImage(
+		int(config.ParatrooperWidth),
+		int(config.ParatrooperHeight),
+	)
+	g.paratrooperFellImage.Fill(config.ColourMagenta)
+}
