@@ -126,7 +126,16 @@ bulletLoop:
 				p.y,
 				config.ParatrooperWidth,
 				config.ParatrooperHeight,
-			) || utils.Overlap2D(
+			) {
+				audio.Play(g.soundProfile.HitPlayer)
+				g.paratroopers = append(g.paratroopers[:i], g.paratroopers[i+1:]...)
+				g.Score += 5
+				if p.falling {
+					g.Score += 5
+				}
+				continue bulletLoop
+			}
+			if p.parachute && utils.Overlap2D(
 				b.x-config.BulletRadius/2.0,
 				b.y-config.BulletRadius/2.0,
 				config.BulletRadius,
@@ -136,9 +145,8 @@ bulletLoop:
 				config.ParachuteRadius*2.0,
 				config.ParachuteRadius*2.0,
 			) {
-				audio.Play(g.soundProfile.HitPlayer)
-				g.paratroopers = append(g.paratroopers[:i], g.paratroopers[i+1:]...)
-				g.Score += 5
+				p.falling = true
+				p.parachute = false
 				continue bulletLoop
 			}
 		}

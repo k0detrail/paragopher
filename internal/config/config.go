@@ -46,6 +46,7 @@ var (
 	ColourMagenta        = color.RGBA{R: 255, G: 0, B: 255, A: 255}
 	ColourWhite          = color.RGBA{R: 255, G: 255, B: 255, A: 255}
 	ColourBlack          = color.RGBA{R: 0, G: 0, B: 0, A: 255}
+	ColourLightGrey      = color.RGBA{R: 50, G: 50, B: 50, A: 255}
 	ColourDarkGrey       = color.RGBA{R: 25, G: 25, B: 25, A: 255}
 	TransparentBlack     = color.RGBA{R: 0, G: 0, B: 0, A: 0}
 	SemiTransparentBlack = color.RGBA{R: 0, G: 0, B: 0, A: 225}

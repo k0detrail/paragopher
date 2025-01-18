@@ -2,6 +2,7 @@ package game
 
 import (
 	"math"
+	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/ystepanoff/paragopher/internal/audio"
@@ -14,13 +15,19 @@ type Paratrooper struct {
 	parachute   bool
 	landed      bool
 	walking     bool
+	falling     bool
+	fellAt      time.Time
 	over, under *Paratrooper
 }
 
 func (g *Game) drawParatrooper(screen *ebiten.Image, p *Paratrooper) {
 	image := g.paratrooperImage
 	if p.landed || !p.parachute {
-		image = g.paratrooperLandedImage
+		if p.landed && p.falling {
+			image = g.paratrooperFellImage
+		} else {
+			image = g.paratrooperLandedImage
+		}
 	}
 	op := &ebiten.DrawImageOptions{}
 	dx := float64(image.Bounds().Dx())
@@ -31,7 +38,14 @@ func (g *Game) drawParatrooper(screen *ebiten.Image, p *Paratrooper) {
 
 func (g *Game) drawParatroopers(screen *ebiten.Image) {
 	for _, p := range g.paratroopers {
-		g.drawParatrooper(screen, p)
+		if p.landed && p.falling {
+			g.drawParatrooper(screen, p)
+		}
+	}
+	for _, p := range g.paratroopers {
+		if !p.landed || !p.falling {
+			g.drawParatrooper(screen, p)
+		}
 	}
 }
 
@@ -40,7 +54,6 @@ func (g *Game) spawnParatrooper(x, y float32) {
 		x:         x,
 		y:         y,
 		parachute: true,
-		landed:    false,
 	})
 }
 
@@ -49,15 +62,25 @@ func (g *Game) updateParatroopers() {
 	for _, p := range g.paratroopers {
 		if !p.landed {
 			p.y += config.ParatrooperFallSpeed
+			if p.falling {
+				p.y += config.ParatrooperFallSpeed
+			}
 			dy := float32(g.paratrooperLandedImage.Bounds().Dy()) / 2.0
 			if p.y >= config.GroundY-dy {
 				p.y = config.GroundY - dy
 				p.landed = true
 				p.walking = true
 				p.parachute = false
+				p.fellAt = time.Now()
 			}
 		} else {
-			g.walk(p)
+			if p.falling && p.landed {
+				if time.Since(p.fellAt).Seconds() > 3 {
+					continue
+				}
+			} else {
+				g.walk(p)
+			}
 		}
 		updated = append(updated, p)
 	}
