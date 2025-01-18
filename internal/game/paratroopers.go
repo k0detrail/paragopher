@@ -38,7 +38,14 @@ func (g *Game) drawParatrooper(screen *ebiten.Image, p *Paratrooper) {
 
 func (g *Game) drawParatroopers(screen *ebiten.Image) {
 	for _, p := range g.paratroopers {
-		g.drawParatrooper(screen, p)
+		if p.landed && p.falling {
+			g.drawParatrooper(screen, p)
+		}
+	}
+	for _, p := range g.paratroopers {
+		if !p.landed || !p.falling {
+			g.drawParatrooper(screen, p)
+		}
 	}
 }
 

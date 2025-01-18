@@ -270,5 +270,5 @@ func (g *Game) initParatrooperFellImage() {
 		int(config.ParatrooperWidth),
 		int(config.ParatrooperHeight),
 	)
-	g.paratrooperFellImage.Fill(config.ColourMagenta)
+	g.paratrooperFellImage.Fill(config.ColourLightGrey)
 }
