@@ -64,8 +64,13 @@ func (g *Game) drawIntro(screen *ebiten.Image) {
 		g.lastIntroStep = time.Now()
 	}
 
-	if g.introStep == len(introText) &&
-		time.Since(g.lastIntroStep).Seconds() > 2 {
+	if ebiten.IsKeyPressed(ebiten.KeyEnter) || g.isIntroFinished() {
+		g.soundProfile.IntroPlayer.Close()
 		g.showIntro = false
 	}
+}
+
+func (g *Game) isIntroFinished() bool {
+	return g.introStep == len(introText) &&
+		time.Since(g.lastIntroStep).Seconds() > 2
 }
