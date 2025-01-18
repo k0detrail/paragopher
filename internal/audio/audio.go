@@ -46,6 +46,8 @@ func NewSoundProfile() *SoundProfile {
 }
 
 func Play(player *audio.Player) {
-	player.Rewind()
+	if err := player.Rewind(); err != nil {
+		log.Fatalf("Failed to rewind audio player: %v", err)
+	}
 	player.Play()
 }

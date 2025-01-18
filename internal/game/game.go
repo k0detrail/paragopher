@@ -97,7 +97,9 @@ func (g *Game) Update() error {
 	}
 	if g.showExitDialog {
 		if ebiten.IsKeyPressed(ebiten.KeyY) {
-			utils.SaveData(g.gameData)
+			if err := utils.SaveData(g.gameData); err != nil {
+				log.Fatalf("Failed to save game dada: %v", err)
+			}
 			return config.ErrQuit
 		}
 		if ebiten.IsKeyPressed(ebiten.KeyN) {
@@ -106,7 +108,9 @@ func (g *Game) Update() error {
 		return nil
 	}
 	if g.showGameOverDialog {
-		utils.SaveData(g.gameData)
+		if err := utils.SaveData(g.gameData); err != nil {
+			log.Fatalf("Failed to save game dada: %v", err)
+		}
 		if ebiten.IsKeyPressed(ebiten.KeyY) {
 			g.Reset()
 		}
