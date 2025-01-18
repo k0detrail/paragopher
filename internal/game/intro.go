@@ -14,14 +14,12 @@ import (
 )
 
 const (
-	introText   = "P A R A G O P H E R"
-	scaleFactor = 4
+	introText     = "P A R A G O P H E R"
+	introSkipText = "Press ENTER to skip intro..."
+	scaleFactor   = 4
 )
 
-var (
-	fontFace     *text.GoTextFace = nil
-	textW, textH float64
-)
+var textFaceSource *text.GoTextFaceSource = nil
 
 var colourLayers = []color.Color{
 	config.ColourDarkGrey,
@@ -31,21 +29,21 @@ var colourLayers = []color.Color{
 
 func (g *Game) initIntro() {
 	audio.Play(g.soundProfile.IntroPlayer)
-
-	faceSource, err := text.NewGoTextFaceSource(
+	var err error
+	textFaceSource, err = text.NewGoTextFaceSource(
 		bytes.NewReader(fonts.PressStart2P_ttf),
 	)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fontFace = &text.GoTextFace{
-		Source: faceSource,
-		Size:   32,
-	}
-	textW, textH = text.Measure(introText, fontFace, 1.0)
 }
 
 func (g *Game) drawIntro(screen *ebiten.Image) {
+	fontFace := &text.GoTextFace{
+		Source: textFaceSource,
+		Size:   32,
+	}
+	textW, textH := text.Measure(introText, fontFace, 1.0)
 	message := introText[:g.introStep]
 
 	for i, colour := range colourLayers {
@@ -57,6 +55,16 @@ func (g *Game) drawIntro(screen *ebiten.Image) {
 		op.ColorScale.ScaleWithColor(colour)
 		text.Draw(screen, message, fontFace, op)
 	}
+
+	fontFace.Size = 12
+	textSkipW, _ := text.Measure(introSkipText, fontFace, 1.0)
+	op := &text.DrawOptions{}
+	op.GeoM.Translate(
+		(config.ScreenWidth-textSkipW)/2.0,
+		config.ScreenHeight-textH,
+	)
+	op.ColorScale.ScaleWithColor(config.ColourWhite)
+	text.Draw(screen, introSkipText, fontFace, op)
 
 	if g.introStep < len(introText) &&
 		time.Since(g.lastIntroStep).Milliseconds() > 300 {
