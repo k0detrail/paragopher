@@ -1,6 +1,6 @@
 module github.com/ystepanoff/paragopher
 
-go 1.23.3
+go 1.23
 
 require github.com/hajimehoshi/ebiten/v2 v2.8.6
 
