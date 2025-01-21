@@ -1,5 +1,5 @@
 [![Go Version](https://img.shields.io/github/go-mod/go-version/ystepanoff/ParaGopher)](https://go.dev)
-[![Forks](https://img.shields.io/github/forks/ystepanoff/ParaGopher)](https://github.com/ystepanoff/ParaGopher/forks)
+[![Forks](https://img.shields.io/github/forks/ystepanoff/ParaGopher?style=flat&color=green)](https://github.com/ystepanoff/ParaGopher/forks)
 [![Issues](https://img.shields.io/github/issues/ystepanoff/ParaGopher)](https://github.com/ystepanoff/ParaGopher/issues)
 [![License](https://img.shields.io/github/license/ystepanoff/ParaGopher)](https://github.com/ystepanoff/ParaGopher/blob/main/LICENSE)
 [![Powered by Ebiten](https://img.shields.io/badge/Powered%20By-Ebitengine™-1abc9c)](https://ebitengine.org/)
