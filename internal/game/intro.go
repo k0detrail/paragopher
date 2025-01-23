@@ -14,9 +14,14 @@ import (
 )
 
 const (
-	introText     = "P A R A G O P H E R"
-	introSkipText = "Press ENTER to skip intro..."
-	scaleFactor   = 4
+	introText = "P A R A G O P H E R"
+
+	introSkipText = "ENTER: skip intro"
+	rotateText    = "LEFT (←), RIGHT (→): rotate barrel"
+	shootText     = "SPACE: shoot bullets"
+	exitText      = "ESCAPE: exit the game"
+
+	scaleFactor = 4
 )
 
 var textFaceSource *text.GoTextFaceSource = nil
@@ -57,14 +62,36 @@ func (g *Game) drawIntro(screen *ebiten.Image) {
 	}
 
 	fontFace.Size = 12
-	textSkipW, _ := text.Measure(introSkipText, fontFace, 1.0)
-	op := &text.DrawOptions{}
-	op.GeoM.Translate(
-		(config.ScreenWidth-textSkipW)/2.0,
-		config.ScreenHeight-textH,
-	)
-	op.ColorScale.ScaleWithColor(config.ColourWhite)
-	text.Draw(screen, introSkipText, fontFace, op)
+
+	controlsTextLines := []string{
+		introSkipText,
+		rotateText,
+		shootText,
+		exitText,
+	}
+
+	controlsTextW, controlsTextH := 0.0, 0.0
+	for _, s := range controlsTextLines {
+		w, h := text.Measure(s, fontFace, 2.0)
+		if w > controlsTextW {
+			controlsTextW = w
+		}
+		if h > controlsTextH {
+			controlsTextH = h
+		}
+	}
+
+	for i, s := range controlsTextLines {
+		op := &text.DrawOptions{}
+		op.GeoM.Translate(
+			(config.ScreenWidth-controlsTextW)/2.0,
+			config.ScreenHeight-controlsTextH*float64(
+				(len(controlsTextLines)-i)+3.0*i,
+			),
+		)
+		op.ColorScale.ScaleWithColor(config.ColourWhite)
+		text.Draw(screen, s, fontFace, op)
+	}
 
 	if g.introStep < len(introText) &&
 		time.Since(g.lastIntroStep).Milliseconds() > 300 {
