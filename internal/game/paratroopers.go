@@ -61,9 +61,10 @@ func (g *Game) updateParatroopers() {
 	updated := make([]*Paratrooper, 0, len(g.paratroopers))
 	for _, p := range g.paratroopers {
 		if !p.landed {
-			p.y += config.ParatrooperFallSpeed
+			speed := float32(config.ParatrooperFallSpeedByDifficulty())
+			p.y += speed
 			if p.falling {
-				p.y += config.ParatrooperFallSpeed
+				p.y += speed
 			}
 			dy := float32(g.paratrooperLandedImage.Bounds().Dy()) / 2.0
 			if p.y >= config.GroundY-dy {

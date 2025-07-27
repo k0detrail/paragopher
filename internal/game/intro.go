@@ -61,6 +61,16 @@ func (g *Game) drawIntro(screen *ebiten.Image) {
 		text.Draw(screen, message, fontFace, op)
 	}
 
+	if ebiten.IsKeyPressed(ebiten.Key1) {
+		config.CurrentDifficulty = config.DifficultyEasy
+	}
+	if ebiten.IsKeyPressed(ebiten.Key2) {
+		config.CurrentDifficulty = config.DifficultyHard
+	}
+	if ebiten.IsKeyPressed(ebiten.Key3) {
+		config.CurrentDifficulty = config.DifficultyVeteran
+	}
+
 	fontFace.Size = 12
 
 	controlsTextLines := []string{
@@ -91,6 +101,20 @@ func (g *Game) drawIntro(screen *ebiten.Image) {
 		)
 		op.ColorScale.ScaleWithColor(config.ColourWhite)
 		text.Draw(screen, s, fontFace, op)
+		diffLabel := map[config.Difficulty]string{
+			config.DifficultyEasy:    "DIFFICULTY: EASY (1)",
+			config.DifficultyHard:    "DIFFICULTY: HARD (2)",
+			config.DifficultyVeteran: "DIFFICULTY: VETERAN (3)",
+		}[config.CurrentDifficulty]
+
+w, h := text.Measure(diffLabel, fontFace, 2.0)
+op = &text.DrawOptions{}
+op.GeoM.Translate(
+	(config.ScreenWidth-w)/2.0,
+	config.ScreenHeight-2*h,
+)
+op.ColorScale.ScaleWithColor(config.ColourTeal)
+text.Draw(screen, diffLabel, fontFace, op)
 	}
 
 	if g.introStep < len(introText) &&

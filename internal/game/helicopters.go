@@ -34,7 +34,7 @@ func (g *Game) drawHelicopters(screen *ebiten.Image) {
 }
 
 func (g *Game) spawnHelicopter() {
-	if rand.Float32() < config.HelicopterSpawnChance {
+	if float64(rand.Float32()) < config.HelicopterSpawnChanceByDifficulty() {
 		startX := -float32(
 			config.HelicopterBodyWidth + config.HelicopterTailWidth,
 		)
@@ -56,17 +56,20 @@ func (g *Game) spawnHelicopter() {
 func (g *Game) updateHelicopters() {
 	active := make([]*Helicopter, 0, len(g.helicopters))
 	for _, h := range g.helicopters {
-		vx := float32(config.HelicopterSpeed)
+		vx := float32(config.HelicopterSpeedByDifficulty())
 		if !h.leftToRight {
 			vx = -vx
 		}
 		h.x += vx
+
 		timePassed := time.Since(h.lastDrop)
 		if timePassed > config.HelicopterDropRate*time.Second &&
-			g.canDrop(h.x) && rand.Float32() < config.ParatrooperSpawnChance {
+			g.canDrop(h.x) &&
+			float64(rand.Float32()) < config.ParatrooperSpawnChanceByDifficulty() {
 			g.spawnParatrooper(h.x, h.y)
 			h.lastDrop = time.Now()
 		}
+
 		if h.x > -100 && h.x < config.ScreenWidth+100 {
 			active = append(active, h)
 		}
