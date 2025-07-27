@@ -11,7 +11,7 @@ const (
 
 	BarrelAngleMin  = -70.0
 	BarrelAngleMax  = 70.0
-	BarrelAngleStep = 0.5
+	BarrelAngleStep = 0.8
 
 	HelicopterSpawnChance = 0.004
 	HelicopterSpeed       = 0.75
