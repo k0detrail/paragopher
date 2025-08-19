@@ -137,6 +137,14 @@ func (g *Game) Draw(screen *ebiten.Image) {
 }
 
 func (g *Game) Update() error {
+	if g.showLeaderboard {
+		if ebiten.IsKeyPressed(ebiten.KeyEscape) {
+			g.showLeaderboard = false
+			g.selectingUser = true
+		}
+		return nil // don't update game while leaderboard is shown
+	}
+
 	if g.selectingUser {
 		return g.updateUserMenu()
 	}
@@ -151,9 +159,6 @@ func (g *Game) Update() error {
 			}
 			break
 		}
-	}
-	if g.showLeaderboard && ebiten.IsKeyPressed(ebiten.KeyEscape) {
-		g.showLeaderboard = false
 	}
 	if g.showExitDialog {
 		if ebiten.IsKeyPressed(ebiten.KeyY) {
