@@ -422,7 +422,12 @@ func (g *Game) updateUserMenu() error {
 		g.creatingUser = true
 		g.userInputName = ""
 	}
-	if ebiten.IsKeyPressed(ebiten.KeyD) && len(g.gameData.Users) > 0 {
+	if ebiten.IsKeyPressed(ebiten.KeyD) &&
+		time.Since(g.lastKeyNavTime) > 200*time.Millisecond &&
+		len(g.gameData.Users) > 0 {
+
+		g.lastKeyNavTime = time.Now() // reset debounce timer
+
 		// delete user
 		idx := g.userMenuIndex
 		g.gameData.Users = append(g.gameData.Users[:idx], g.gameData.Users[idx+1:]...)
