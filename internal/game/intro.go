@@ -24,8 +24,6 @@ const (
 	scaleFactor = 4
 )
 
-var textFaceSource *text.GoTextFaceSource = nil
-
 var colourLayers = []color.Color{
 	config.ColourDarkGrey,
 	config.ColourPink,

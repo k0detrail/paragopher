@@ -7,8 +7,15 @@ import (
 
 const dataFile = ".gamedata"
 
-type GameData struct {
+type User struct {
+	Name    string
 	HiScore int
+}
+
+type GameData struct {
+	Users       []User
+	CurrentUser string
+	HiScore     int // this is optional, just for legacy fallback
 }
 
 func LoadData() (*GameData, error) {
