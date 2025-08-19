@@ -9,7 +9,6 @@ import (
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
-	"github.com/hajimehoshi/ebiten/v2/vector"
 	"github.com/ystepanoff/paragopher/internal/audio"
 	"github.com/ystepanoff/paragopher/internal/config"
 	"github.com/ystepanoff/paragopher/internal/utils"
@@ -224,64 +223,43 @@ func (g *Game) Reset() {
 }
 
 func showYesNoDialog(screen *ebiten.Image, message string) {
+	// dim background
 	overlay := ebiten.NewImage(screen.Bounds().Dx(), screen.Bounds().Dy())
 	overlay.Fill(config.SemiTransparentBlack)
 	screen.DrawImage(overlay, nil)
 
-	dialogWidth, dialogHeight := 300, 150
-	dialogX := (screen.Bounds().Dx() - dialogWidth) / 2
-	dialogY := (screen.Bounds().Dy() - dialogHeight) / 2
-	dialog := ebiten.NewImage(dialogWidth, dialogHeight)
-	dialog.Fill(config.ColourDarkGrey)
+	fontFace := &text.GoTextFace{
+		Source: textFaceSource,
+		Size:   14,
+	}
 
-	vector.DrawFilledRect(
-		dialog,
-		0,
-		0,
-		float32(dialogWidth),
-		5,
-		config.ColourBlack,
-		false,
-	)
-	vector.DrawFilledRect(
-		dialog,
-		0,
-		float32(dialogHeight-5),
-		float32(dialogWidth),
-		5,
-		config.ColourBlack,
-		false,
-	)
-	vector.DrawFilledRect(
-		dialog,
-		0,
-		0,
-		5,
-		float32(dialogHeight),
-		config.ColourBlack,
-		false,
-	)
-	vector.DrawFilledRect(
-		dialog,
-		float32(dialogWidth-5),
-		0,
-		5,
-		float32(dialogHeight),
-		config.ColourBlack,
-		false,
-	)
-	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Translate(float64(dialogX), float64(dialogY))
-	screen.DrawImage(dialog, op)
+	// support multi-line messages
+	lines := strings.Split(message, "\n")
+	startY := float64(config.ScreenHeight)/2 - float64(len(lines))*12
 
-	textX := dialogX + 50
-	textY := dialogY + 40
-	ebitenutil.DebugPrintAt(screen, message, textX, textY)
+	for i, line := range lines {
+		lineW, _ := text.Measure(line, fontFace, 1.0)
+		op := &text.DrawOptions{}
+		op.GeoM.Translate((float64(config.ScreenWidth)-lineW)/2, startY+float64(i*20))
+		op.ColorScale.ScaleWithColor(config.ColourWhite)
+		text.Draw(screen, line, fontFace, op)
+	}
 
+	// yes / no controls
 	yesText := "Y: Yes"
 	noText := "N: No"
-	ebitenutil.DebugPrintAt(screen, yesText, dialogX+50, dialogY+90)
-	ebitenutil.DebugPrintAt(screen, noText, dialogX+200, dialogY+90)
+
+	yesW, _ := text.Measure(yesText, fontFace, 1.0)
+
+	yesOp := &text.DrawOptions{}
+	yesOp.GeoM.Translate((float64(config.ScreenWidth)/2)-yesW-20, startY+float64(len(lines)*20)+20)
+	yesOp.ColorScale.ScaleWithColor(config.ColourTeal)
+	text.Draw(screen, yesText, fontFace, yesOp)
+
+	noOp := &text.DrawOptions{}
+	noOp.GeoM.Translate((float64(config.ScreenWidth)/2)+20, startY+float64(len(lines)*20)+20)
+	noOp.ColorScale.ScaleWithColor(config.ColourPink)
+	text.Draw(screen, noText, fontFace, noOp)
 }
 
 func (g *Game) drawUserMenu(screen *ebiten.Image) {
